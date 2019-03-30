@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "901110585791",
+    "firebase_url": "https://e-learning-22827.firebaseio.com",
+    "project_id": "e-learning-22827",
+    "storage_bucket": "e-learning-22827.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901110585791:android:932facc029be23dd",
+        "android_client_info": {
+          "package_name": "freedom.com.freedom_e_learning"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901110585791-76554ukep9mlpqh8li1vm6u034ru0tfr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "freedom.com.freedom_e_learning",
+            "certificate_hash": "751903d663d34dc2cad9c102b904424791465a81"
+          }
+        },
+        {
+          "client_id": "901110585791-rb5opmfi6m16f0hdovqqja6rqqiulr1e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDU0G7i-hUJECh8Ij-3Fib5kwgFE5ZA8PY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901110585791-0k81u9snhq4n53dgmluhuu79fmr554ri.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
