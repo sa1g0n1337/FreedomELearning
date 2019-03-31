@@ -5,14 +5,14 @@ import java.util.Map;
 public class ListeningQuestion {
 
     private String question;
-    private Map<Integer, String> answers;
+    private Map<String, String> answers;
     private int correctAnswer;
 
     public ListeningQuestion() {
 
     }
 
-    public ListeningQuestion(String question, Map<Integer, String> answers, int correctAnswer) {
+    public ListeningQuestion(String question, Map<String, String> answers, int correctAnswer) {
         this.question = question;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
@@ -26,11 +26,11 @@ public class ListeningQuestion {
         this.question = question;
     }
 
-    public Map<Integer, String> getAnswers() {
+    public Map<String, String> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(Map<Integer, String> answers) {
+    public void setAnswers(Map<String, String> answers) {
         this.answers = answers;
     }
 
