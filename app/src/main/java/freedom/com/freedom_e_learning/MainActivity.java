@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity
         setInitialData();
         BoomMenuButton bmb = (BoomMenuButton) findViewById(R.id.BoomMenu);
         bmb.setButtonEnum(ButtonEnum.SimpleCircle);
-        bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_4_2);
+        bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_4_1);
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_4_2);
 //        bmb.setShowMoveEaseEnum(EaseEnum.EaseInElastic);
 //        bmb.setHideMoveEaseEnum(EaseEnum.EaseOutElastic);
@@ -214,6 +214,13 @@ public class MainActivity extends AppCompatActivity
 //        bmb.setHideRotateEaseEnum(EaseEnum.EaseOutElastic);
 //        bmb.setShowScaleEaseEnum(EaseEnum.EaseInElastic);
 //        bmb.setHideScaleEaseEnum(EaseEnum.EaseOutElastic);
+        bmb.setShowDelay(0);
+        bmb.setShowDuration(1000);
+        bmb.setRotateDegree(1080);
+        bmb.setHideDelay(0);
+        bmb.setHideDuration(500);
+        bmb.setFrames(80);
+        bmb.setUse3DTransformAnimation(true);
         bmb.setBoomEnum(BoomEnum.PARABOLA_3);
 
         for (int i =0; i < bmb.getPiecePlaceEnum().pieceNumber();i++){
