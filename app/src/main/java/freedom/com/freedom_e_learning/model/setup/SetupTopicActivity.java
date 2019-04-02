@@ -14,8 +14,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
@@ -45,11 +43,11 @@ public class SetupTopicActivity extends AppCompatActivity {
 
     ArrayList<ListeningQuestion> listeningQuestions = new ArrayList<>();
     ListeningQuestion listeningQuestion = new ListeningQuestion();
-    Map<String, String> listeningAns = new HashMap<String, String>();
+    ArrayList<String> listeningAns = new ArrayList<>();
 
     ArrayList<ReadingQuestion> readingQuestions = new ArrayList<>();
     ReadingQuestion readingQuest = new ReadingQuestion();
-    Map<String, String> readingAns = new HashMap<String, String>();
+    ArrayList<String> readingAns = new ArrayList<>();
 
     Topic topic;
     Listening listening;
@@ -111,11 +109,12 @@ public class SetupTopicActivity extends AppCompatActivity {
                 listening.setAudioURL(listeningAudio.getText().toString());
                 listening.setTranscript(listeningTranscript.getText().toString());
                 listeningQuestion.setQuestion(listeningQuestion1.getText().toString());
-                listeningAns.put("1", listeningQ1A1.getText().toString());
-                listeningAns.put("2", listeningQ1A2.getText().toString());
-                listeningAns.put("3", listeningQ1A3.getText().toString());
-                listeningAns.put("4", listeningQ1A4.getText().toString());
+                listeningAns.add(listeningQ1A1.getText().toString());
+                listeningAns.add(listeningQ1A2.getText().toString());
+                listeningAns.add(listeningQ1A3.getText().toString());
+                listeningAns.add(listeningQ1A4.getText().toString());
                 listeningQuestion.setAnswers(listeningAns);
+                listeningQuestion.setCorrectAnswer(listeningQ1A1.getText().toString());
                 listeningQuestions.add(listeningQuestion);
                 listening.setQuestions(listeningQuestions);
 
@@ -130,10 +129,10 @@ public class SetupTopicActivity extends AppCompatActivity {
                 reading.setTopic(topic.getId());
                 reading.setArticle(readingArticle.getText().toString());
                 readingQuest.setQuestion(readingQuestion.getText().toString());
-                readingAns.put("1", readingQ1A1.getText().toString());
-                readingAns.put("2", readingQ1A2.getText().toString());
-                readingAns.put("3", readingQ1A3.getText().toString());
-                readingAns.put("4", readingQ1A4.getText().toString());
+                readingAns.add(readingQ1A1.getText().toString());
+                readingAns.add(readingQ1A2.getText().toString());
+                readingAns.add(readingQ1A3.getText().toString());
+                readingAns.add(readingQ1A4.getText().toString());
                 readingQuest.setAnswers(readingAns);
                 readingQuestions.add(readingQuest);
                 reading.setQuestions(readingQuestions);
