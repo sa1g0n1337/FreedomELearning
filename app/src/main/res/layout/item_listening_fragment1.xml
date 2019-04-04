@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_margin="15dp">
+    android:layout_margin="15dp"
+    android:orientation="vertical">
 
 
     <TextView
@@ -17,6 +17,12 @@
         android:layout_height="wrap_content">
 
         <RadioButton
+            android:id="@+id/radListeningAnswer0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Answer 0" />
+
+        <RadioButton
             android:id="@+id/radListeningAnswer1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,17 +34,6 @@
             android:layout_height="wrap_content"
             android:text="Answer 2" />
 
-        <RadioButton
-            android:id="@+id/radListeningAnswer3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Answer 3" />
-
-        <RadioButton
-            android:id="@+id/radListeningAnswer4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Answer 4" />
     </RadioGroup>
 
 </LinearLayout>

@@ -18,7 +18,7 @@ public class ListeningActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listening);
 
         // Set up cái thanh toolbar đó
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.ListeningToolbar);
         mToolbar.setTitle("Listening");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

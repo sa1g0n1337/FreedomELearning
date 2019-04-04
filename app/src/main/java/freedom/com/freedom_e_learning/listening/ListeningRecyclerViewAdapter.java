@@ -38,10 +38,10 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int position) {
         recyclerViewHolder.txtQuestion.setText(listeningQuestions.get(position).getQuestion());
-        recyclerViewHolder.radAnswer1.setText(listeningQuestions.get(position).getAnswers().get(0));
-        recyclerViewHolder.radAnswer2.setText(listeningQuestions.get(position).getAnswers().get(1));
-        recyclerViewHolder.radAnswer3.setText(listeningQuestions.get(position).getAnswers().get(2));
-        recyclerViewHolder.radAnswer4.setText(listeningQuestions.get(position).getAnswers().get(3));
+        recyclerViewHolder.radAnswer0.setText(listeningQuestions.get(position).getAnswers().get(0));
+        recyclerViewHolder.radAnswer1.setText(listeningQuestions.get(position).getAnswers().get(1));
+        recyclerViewHolder.radAnswer2.setText(listeningQuestions.get(position).getAnswers().get(2));
+
     }
 
     @Override
@@ -52,19 +52,18 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txtQuestion;
+        private RadioButton radAnswer0;
         private RadioButton radAnswer1;
         private RadioButton radAnswer2;
-        private RadioButton radAnswer3;
-        private RadioButton radAnswer4;
 
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             txtQuestion = itemView.findViewById(R.id.txtListeningQuestion);
+            radAnswer0 = itemView.findViewById(R.id.radListeningAnswer0);
             radAnswer1 = itemView.findViewById(R.id.radListeningAnswer1);
             radAnswer2 = itemView.findViewById(R.id.radListeningAnswer2);
-            radAnswer3 = itemView.findViewById(R.id.radListeningAnswer3);
-            radAnswer4 = itemView.findViewById(R.id.radListeningAnswer4);
+
 
         }
     }

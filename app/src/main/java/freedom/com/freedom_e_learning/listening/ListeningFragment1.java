@@ -84,7 +84,7 @@ public class ListeningFragment1 extends Fragment {
                     btn.setText("Pause Streaming");
 
                     if (initialStage) {
-                        new Player().execute("https://r2---sn-npoeener.googlevideo.com/videoplayback?key=yt6&ratebypass=yes&ipbits=0&clen=19285316&itag=18&c=WEB&initcwndbps=2255000&dur=1482.036&fvip=2&signature=2BA91A6BA163ED1ADA3A76C8A7FE4083F6DC5277.DB4DF0BD6A9428D69452E0581CD8D0C5D178925C&gir=yes&sparams=clen,dur,ei,gir,id,initcwndbps,ip,ipbits,itag,lmt,mime,mm,mn,ms,mv,pl,ratebypass,requiressl,source,expire&lmt=1513829634107727&ei=TB-bXPbxIKWkz7sPt9qQuAs&requiressl=yes&mime=video/mp4&ip=47.74.148.194&mm=31,26&source=youtube&pl=19&mn=sn-npoeener,sn-i3belnez&id=o-AJMQwCGgh4KLPkVbe_YYr1vugS4-m90xx3bTRdvYPXTb&ms=au,onr&mt=1553669847&mv=m&expire=1553691564&signature=");
+                        new Player().execute(audioUrl);
                     } else {
                         if (!mediaPlayer.isPlaying())
                             mediaPlayer.start();
