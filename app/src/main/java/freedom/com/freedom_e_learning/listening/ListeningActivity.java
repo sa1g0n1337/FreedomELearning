@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import freedom.com.freedom_e_learning.R;
-import freedom.com.freedom_e_learning.adapter.ListeningFragmentAdapter;
 
 public class ListeningActivity extends AppCompatActivity {
 
@@ -18,18 +17,23 @@ public class ListeningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listening);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Set up cái thanh toolbar đó
+        mToolbar = findViewById(R.id.ListeningToolbar);
         mToolbar.setTitle("Listening");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+        // Set mấy cái tab trong listening nè
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Listening"));
-        tabLayout.addTab(tabLayout.newTab().setText("Quiz"));
-        tabLayout.addTab(tabLayout.newTab().setText("Transcript"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.addTab(tabLayout.newTab().setText(""));
+        tabLayout.addTab(tabLayout.newTab().setText(""));
+        tabLayout.addTab(tabLayout.newTab().setText(""));
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_headset_24dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_speaker_notes_24dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_details_24dp);
 
+        // Set fragment nè
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final ListeningFragmentAdapter adapter = new ListeningFragmentAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);

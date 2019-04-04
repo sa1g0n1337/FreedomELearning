@@ -1,18 +1,18 @@
 package freedom.com.freedom_e_learning.model.listening;
 
-import java.util.Map;
+import java.util.ArrayList;
 
 public class ListeningQuestion {
 
     private String question;
-    private Map<Integer, String> answers;
-    private int correctAnswer;
+    private ArrayList<String> answers;
+    private String correctAnswer;
 
     public ListeningQuestion() {
 
     }
 
-    public ListeningQuestion(String question, Map<Integer, String> answers, int correctAnswer) {
+    public ListeningQuestion(String question, ArrayList<String> answers, String correctAnswer) {
         this.question = question;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
@@ -26,19 +26,19 @@ public class ListeningQuestion {
         this.question = question;
     }
 
-    public Map<Integer, String> getAnswers() {
+    public ArrayList<String> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(Map<Integer, String> answers) {
+    public void setAnswers(ArrayList<String> answers) {
         this.answers = answers;
     }
 
-    public int getCorrectAnswer() {
+    public String getCorrectAnswer() {
         return correctAnswer;
     }
 
-    public void setCorrectAnswer(int correctAnswer) {
+    public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 }
