@@ -1,4 +1,4 @@
-package freedom.com.freedom_e_learning.adapter;
+package freedom.com.freedom_e_learning.listening;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -47,9 +47,9 @@ public class ListeningFragmentAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Listening";
             case 1:
-                return "Quiz";
-            case 2:
                 return "Transcript";
+            case 2:
+                return "Chua biet";
             default:
                 return "";
         }
