@@ -8,7 +8,7 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
@@ -28,15 +28,16 @@
             app:layout_constraintTop_toTopOf="parent">
         </com.nightonke.boommenu.BoomMenuButton>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:textAlignment="center"
-        android:text="Hi! Ready for your first test yet?Let's go!"
-        android:textSize="20dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
 
-    </android.support.v7.widget.RecyclerView>
+            android:textAlignment="center"
+            android:text="Hi! Ready for your first test yet?Let's go!"
+            android:textSize="20dp" />
+
+    </android.support.v7.widget.CardView>
 
     <Button
     android:id="@+id/btn_listening"
