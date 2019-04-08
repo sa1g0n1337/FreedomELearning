@@ -6,14 +6,42 @@
     android:background="@color/com_facebook_button_background_color_focused"
     android:gravity="center_horizontal"
     android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/btnPlay"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/play"
+            android:textAlignment="center"
+            android:clickable="true"/>
+
+        <TextView
+            android:id="@+id/Time"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/btnPlay"
+            android:text="00:00/00:00"
+            android:textAlignment="center"
+            android:gravity="center"
+            />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/Time"/>
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/audioStreamBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-
         android:text="Launch Streaming"
         android:textSize="18sp" />
 

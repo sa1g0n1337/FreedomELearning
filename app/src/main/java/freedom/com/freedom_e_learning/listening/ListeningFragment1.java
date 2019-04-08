@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,9 +26,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
+import freedom.com.freedom_e_learning.MainActivity;
 import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.model.listening.Listening;
 import freedom.com.freedom_e_learning.model.listening.ListeningQuestion;
@@ -33,11 +39,16 @@ import freedom.com.freedom_e_learning.model.listening.ListeningQuestion;
 public class ListeningFragment1 extends Fragment {
 
     private Button btn;
+    private ImageView btnPlay;
     private boolean playPause;
     private MediaPlayer mediaPlayer;
     private ProgressDialog progressDialog;
     private boolean initialStage = true;
     private String audioUrl;
+    private SeekBar seekBar;
+    private Runnable runnable;
+    private Handler handler;
+    private TextView time;
     Listening listening;
     ArrayList<ListeningQuestion> listeningQuestions;
 
@@ -54,8 +65,10 @@ public class ListeningFragment1 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1_listening, container, false);
 
+
         setControl(view);
         setEvents();
+        Audiobar();
         return view;
 
     }
@@ -65,6 +78,10 @@ public class ListeningFragment1 extends Fragment {
         btn = view.findViewById(R.id.audioStreamBtn);
         mediaPlayer = new MediaPlayer();
         progressDialog = new ProgressDialog(getActivity());
+        btnPlay = view.findViewById(R.id.btnPlay);
+        seekBar = view.findViewById(R.id.seekBar);
+        time = view.findViewById(R.id.Time);
+        handler = new Handler();
 
         // Lấy tạo đường dẫn tới node listening của topic 1, sau này sẽ set id của topic dynamic
         listeningReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child("1").child(Constants.LISTENING_NODE);
@@ -188,6 +205,66 @@ public class ListeningFragment1 extends Fragment {
 
             progressDialog.setMessage("Buffering...");
             progressDialog.show();
+        }
+    }
+
+    private void Audiobar(){
+        mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.dancin);
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                seekBar.setMax(mediaPlayer.getDuration());
+                changeseekBar();
+
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if(b){
+                    mediaPlayer.seekTo(i);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnPlay.setImageResource(R.drawable.pause);
+                if(mediaPlayer.isPlaying()){
+                    mediaPlayer.pause();
+                    btnPlay.setImageResource(R.drawable.play);
+                }else {
+                    mediaPlayer.start();
+                    btnPlay.setImageResource(R.drawable.pause);
+                    changeseekBar();
+                }
+            }
+        });
+    }
+
+    private void changeseekBar() {
+        seekBar.setProgress(mediaPlayer.getCurrentPosition());
+        if(mediaPlayer.isPlaying()){
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    changeseekBar();
+                    time.setText(String.valueOf(mediaPlayer.getCurrentPosition())+"/"+mediaPlayer.getDuration());
+                }
+            };
+            handler.postDelayed(runnable,100);
         }
     }
 }
