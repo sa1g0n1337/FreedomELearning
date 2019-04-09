@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">901110585791-rb5opmfi6m16f0hdovqqja6rqqiulr1e.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://e-learning-22827.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">901110585791</string>
+    <string name="google_api_key" translatable="false">AIzaSyDU0G7i-hUJECh8Ij-3Fib5kwgFE5ZA8PY</string>
+    <string name="google_app_id" translatable="false">1:901110585791:android:932facc029be23dd</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDU0G7i-hUJECh8Ij-3Fib5kwgFE5ZA8PY</string>
+    <string name="google_storage_bucket" translatable="false">e-learning-22827.appspot.com</string>
+    <string name="project_id" translatable="false">e-learning-22827</string>
+</resources>
