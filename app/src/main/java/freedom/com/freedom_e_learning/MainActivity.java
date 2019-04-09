@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import freedom.com.freedom_e_learning.listening.ListeningActivity;
+import freedom.com.freedom_e_learning.reading.ReadingActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -94,6 +95,15 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, TestActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button reading = findViewById(R.id.btn_reading);
+        reading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ReadingActivity.class);
                 startActivity(intent);
             }
         });

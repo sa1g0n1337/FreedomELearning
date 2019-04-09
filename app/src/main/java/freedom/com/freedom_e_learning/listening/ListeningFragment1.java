@@ -15,12 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import freedom.com.freedom_e_learning.Constants;
@@ -29,8 +31,11 @@ import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.model.listening.Listening;
 import freedom.com.freedom_e_learning.model.listening.ListeningQuestion;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 
 public class ListeningFragment1 extends Fragment {
+
 
     private Button btn;
     private boolean playPause;
@@ -52,7 +57,7 @@ public class ListeningFragment1 extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment1_listening, container, false);
+        View view = inflater.inflate(R.layout.listening_fragment1, container, false);
 
         setControl(view);
         setEvents();
@@ -73,34 +78,33 @@ public class ListeningFragment1 extends Fragment {
 
     public void setEvents() {
         getListeningData();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        final String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
 
         // Set cho nút audio
         btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!playPause) {
-                    btn.setText("Pause Streaming");
-
-                    if (initialStage) {
-                        new Player().execute(audioUrl);
-                    } else {
-                        if (!mediaPlayer.isPlaying())
-                            mediaPlayer.start();
-                    }
-
-                    playPause = true;
-
-                } else {
-                    btn.setText("Launch Streaming");
-
-                    if (mediaPlayer.isPlaying()) {
-                        mediaPlayer.pause();
-                    }
-
-                    playPause = false;
+            public void onClick(View v) {
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                try {
+                    mediaPlayer.setDataSource(url);
+                } catch (IllegalArgumentException e) {
+                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                } catch (SecurityException e) {
+                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                } catch (IllegalStateException e) {
+                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                try {
+                    mediaPlayer.prepare();
+                } catch (IllegalStateException e) {
+                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
+                }
+                mediaPlayer.start();
             }
         });
     }

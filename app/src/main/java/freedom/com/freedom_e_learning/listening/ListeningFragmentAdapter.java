@@ -4,13 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import freedom.com.freedom_e_learning.listening.ListeningFragment1;
-import freedom.com.freedom_e_learning.listening.ListeningFragment2;
-import freedom.com.freedom_e_learning.listening.ListeningFragment3;
-
 public class ListeningFragmentAdapter extends FragmentPagerAdapter {
 
-    public final static int FRAGMENT_COUNT = 3;
+    public final static int FRAGMENT_COUNT = 2;
 //    private String mUserID = "";
 
     public ListeningFragmentAdapter(FragmentManager fm) {
@@ -27,9 +23,6 @@ public class ListeningFragmentAdapter extends FragmentPagerAdapter {
             case 1:
                 ListeningFragment2 tab2 = new ListeningFragment2();
                 return tab2;
-            case 2:
-                ListeningFragment3 tab3 = new ListeningFragment3();
-                return tab3;
 
             default:
                 return null;
@@ -48,8 +41,6 @@ public class ListeningFragmentAdapter extends FragmentPagerAdapter {
                 return "Listening";
             case 1:
                 return "Transcript";
-            case 2:
-                return "Chua biet";
             default:
                 return "";
         }

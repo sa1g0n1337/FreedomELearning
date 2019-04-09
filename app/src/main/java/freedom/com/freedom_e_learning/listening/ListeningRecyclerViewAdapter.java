@@ -29,7 +29,7 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
         View v;
-        v = LayoutInflater.from(context).inflate(R.layout.item_listening_fragment1, viewGroup, false);
+        v = LayoutInflater.from(context).inflate(R.layout.listening_item_fragment1, viewGroup, false);
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(v);
         return recyclerViewHolder;
     }
