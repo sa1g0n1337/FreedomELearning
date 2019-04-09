@@ -10,15 +10,35 @@
     tools:showIn="@layout/app_bar_main">
 
 
-    <Button
-        android:id="@+id/btn_test"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test"
-        app:layout_constraintBottom_toBottomOf="@id/btn_listening"
+        android:layout_margin="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <com.nightonke.boommenu.BoomMenuButton
+                android:id="@+id/BoomMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:bmb_inList="true"></com.nightonke.boommenu.BoomMenuButton>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/BoomMenu"
+                android:text="Hi! Ready for your first test yet?Let's go!"
+                android:textSize="20dp" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/topic_recycler"

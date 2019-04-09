@@ -1,6 +1,7 @@
 package freedom.com.freedom_e_learning;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,13 +28,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.nightonke.boommenu.Animation.BoomEnum;
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.ButtonEnum;
+import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import freedom.com.freedom_e_learning.listening.ListeningActivity;
 import freedom.com.freedom_e_learning.model.topic.Topic;
-import freedom.com.freedom_e_learning.reading.ReadingActivity;
 import freedom.com.freedom_e_learning.topic.TopicRecyclerViewAdapter;
 
 public class MainActivity extends AppCompatActivity
@@ -57,6 +63,7 @@ public class MainActivity extends AppCompatActivity
     private TopicRecyclerViewAdapter topicRecyclerViewAdapter;
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference topicReference;
+    ArrayList<Integer> imageIDList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,7 @@ public class MainActivity extends AppCompatActivity
         setEvents();
         Log.d(TAG, String.valueOf(mData.isSignIn()));
         new LoadDataTask().execute();
+        BoomMenu();
     }
 
     @Override
@@ -256,6 +264,56 @@ public class MainActivity extends AppCompatActivity
         txtUsername.setText(userName);
         txtEmail.setText(email);
         Glide.with(imgAvatar).load(linkPhoto).into(imgAvatar);
+    }
+
+    private void BoomMenu() {
+
+        imageIDList = new ArrayList<>();
+        setInitialData();
+        BoomMenuButton bmb = (BoomMenuButton) findViewById(R.id.BoomMenu);
+        bmb.setButtonEnum(ButtonEnum.SimpleCircle);
+        bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_4_1);
+        bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_4_2);
+//        bmb.setShowMoveEaseEnum(EaseEnum.EaseInElastic);
+//        bmb.setHideMoveEaseEnum(EaseEnum.EaseOutElastic);
+//        bmb.setShowRotateEaseEnum(EaseEnum.EaseInElastic);
+//        bmb.setHideRotateEaseEnum(EaseEnum.EaseOutElastic);
+//        bmb.setShowScaleEaseEnum(EaseEnum.EaseInElastic);
+//        bmb.setHideScaleEaseEnum(EaseEnum.EaseOutElastic);
+        bmb.setShowDelay(0);
+        bmb.setShowDuration(1000);
+        bmb.setRotateDegree(1080);
+        bmb.setHideDelay(0);
+        bmb.setHideDuration(500);
+        bmb.setFrames(80);
+        bmb.setUse3DTransformAnimation(true);
+        bmb.setBoomEnum(BoomEnum.PARABOLA_3);
+
+        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
+            SimpleCircleButton.Builder builder = new SimpleCircleButton.Builder()
+                    .normalImageRes(imageIDList.get(i))
+                    .highlightedImageRes(imageIDList.get(i))
+                    .highlightedColor(Color.WHITE)
+                    .listener(new OnBMClickListener() {
+                        @Override
+                        public void onBoomButtonClick(int i) {
+                            if (i == 0) {
+                                Intent intent = new Intent(MainActivity.this, ListeningActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(MainActivity.this, "selected ", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+            bmb.addBuilder(builder);
+        }
+    }
+
+    private void setInitialData() {
+        imageIDList.add(R.drawable.listening);
+        imageIDList.add(R.drawable.reading);
+        imageIDList.add(R.drawable.writing);
+        imageIDList.add(R.drawable.speaking);
     }
 
 //    private void googleLogOut() {
