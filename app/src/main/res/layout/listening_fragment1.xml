@@ -17,7 +17,7 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:clickable="true"
-            android:src="@drawable/play" />
+            android:src="@drawable/ic_play_circle_outline_24dp" />
 
         <TextView
             android:id="@+id/Time"
@@ -37,15 +37,6 @@
             android:layout_toRightOf="@+id/Time" />
 
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/audioStreamBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-
-        android:text="Launch Streaming"
-        android:textSize="18sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listening_fragment1_recycler"

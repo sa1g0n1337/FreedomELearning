@@ -1,9 +1,7 @@
 package freedom.com.freedom_e_learning.listening;
 
 import android.app.ProgressDialog;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -11,12 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -26,9 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Timer;
 
 import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
@@ -36,15 +29,11 @@ import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.model.listening.Listening;
 import freedom.com.freedom_e_learning.model.listening.ListeningQuestion;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 
 public class ListeningFragment1 extends Fragment {
 
 
-    private Button btn;
     private ImageView btnPlay;
-    private boolean playPause;
     private MediaPlayer mediaPlayer;
     private ProgressDialog progressDialog;
     private SeekBar seekBar;
@@ -52,7 +41,6 @@ public class ListeningFragment1 extends Fragment {
     private Handler handler;
     private TextView time;
 
-    private boolean initialStage = true;
     private String audioUrl;
     private int save;
 
@@ -81,7 +69,7 @@ public class ListeningFragment1 extends Fragment {
 
     public void setControl(View view) {
 
-        btn = view.findViewById(R.id.audioStreamBtn);
+
         mediaPlayer = new MediaPlayer();
         progressDialog = new ProgressDialog(getActivity());
         btnPlay = view.findViewById(R.id.btnPlay);
@@ -97,34 +85,6 @@ public class ListeningFragment1 extends Fragment {
     public void setEvents() {
         getListeningData();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        final String url = "http://programmerguru.com/android-tutorial/wp-content/uploads/2013/04/hosannatelugu.mp3";
-
-        // Set cho nút audio
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                try {
-                    mediaPlayer.setDataSource(url);
-                } catch (IllegalArgumentException e) {
-                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (SecurityException e) {
-                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (IllegalStateException e) {
-                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    mediaPlayer.prepare();
-                } catch (IllegalStateException e) {
-                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", Toast.LENGTH_LONG).show();
-                }
-                mediaPlayer.start();
-            }
-        });
     }
 
     public void getListeningData() {
@@ -152,69 +112,8 @@ public class ListeningFragment1 extends Fragment {
     }
 
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        if (mediaPlayer != null) {
-            mediaPlayer.reset();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-    }
-
-    class Player extends AsyncTask<String, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(String... strings) {
-            Boolean prepared = false;
-
-            try {
-                mediaPlayer.setDataSource(strings[0]);
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mediaPlayer) {
-                        initialStage = true;
-                        playPause = false;
-                        btn.setText("Launch Streaming");
-                        mediaPlayer.stop();
-                        mediaPlayer.reset();
-                    }
-                });
-
-                mediaPlayer.prepare();
-                prepared = true;
-
-            } catch (Exception e) {
-                Log.e("MyAudioStreamingApp", e.getMessage());
-                prepared = false;
-            }
-
-            return prepared;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-
-            if (progressDialog.isShowing()) {
-                progressDialog.cancel();
-            }
-
-            mediaPlayer.start();
-            initialStage = false;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            progressDialog.setMessage("Buffering...");
-            progressDialog.show();
-        }
-    }
-
-    private void Audiobar(){
-        mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.dancin);
+    private void Audiobar() {
+        mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.dancin);
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
@@ -227,7 +126,7 @@ public class ListeningFragment1 extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if(b){
+                if (b) {
 
                     mediaPlayer.seekTo(i);
                     //changeseekBar();
@@ -249,13 +148,13 @@ public class ListeningFragment1 extends Fragment {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnPlay.setImageResource(R.drawable.pause);
-                if(mediaPlayer.isPlaying()){
+                btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
-                    btnPlay.setImageResource(R.drawable.play);
-                }else{
+                    btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                } else {
                     mediaPlayer.start();
-                    btnPlay.setImageResource(R.drawable.pause);
+                    btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
                     changeseekBar();
                 }
 
@@ -268,7 +167,7 @@ public class ListeningFragment1 extends Fragment {
         seekBar.setProgress(save);
         final String currentTimer = miliSecondsToTimer(mediaPlayer.getCurrentPosition());
         final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
-        if(mediaPlayer.isPlaying()){
+        if (mediaPlayer.isPlaying()) {
             runnable = new Runnable() {
                 @Override
                 public void run() {
@@ -276,7 +175,7 @@ public class ListeningFragment1 extends Fragment {
                     time.setText(currentTimer + "/" + totalTimer);
                 }
             };
-            handler.postDelayed(runnable,0);
+            handler.postDelayed(runnable, 0);
         }
 //        else {
 //                    mediaPlayer.pause();
@@ -293,20 +192,20 @@ public class ListeningFragment1 extends Fragment {
 
     }
 
-    public String miliSecondsToTimer(long miliseconds){
+    public String miliSecondsToTimer(long miliseconds) {
         String finalTimerString = "";
         String secondsString;
 
-        int hours = (int)(miliseconds / (1000*60*60));
-        int minutes = (int)(miliseconds % (1000*60*60)) / (1000*60);
-        int seconds = (int)((miliseconds % (1000*60*60)) % (1000*60) / 1000);
+        int hours = (int) (miliseconds / (1000 * 60 * 60));
+        int minutes = (int) (miliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((miliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
 
-        if(hours > 0){
+        if (hours > 0) {
             secondsString = "0" + seconds;
-        }else {
+        } else {
             secondsString = "" + seconds;
         }
-        finalTimerString = finalTimerString + minutes + ":" +secondsString;
+        finalTimerString = finalTimerString + minutes + ":" + secondsString;
 
         return finalTimerString;
     }
