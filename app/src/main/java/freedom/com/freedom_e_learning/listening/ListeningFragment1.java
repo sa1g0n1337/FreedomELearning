@@ -88,7 +88,6 @@ public class ListeningFragment1 extends Fragment {
         recyclerView = view.findViewById(R.id.listening_fragment1_recycler);
     }
 
-
     public void setEvents() {
         getListeningData();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -122,6 +121,7 @@ public class ListeningFragment1 extends Fragment {
             }
         });
     }
+
     public void getListeningData() {
         // Lấy dữ liệu từ firebase trong node
         listeningReference.addValueEventListener(new ValueEventListener() {
@@ -209,9 +209,7 @@ public class ListeningFragment1 extends Fragment {
     }
 
     private void Audiobar(){
-        getListeningData();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.dancin);
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
