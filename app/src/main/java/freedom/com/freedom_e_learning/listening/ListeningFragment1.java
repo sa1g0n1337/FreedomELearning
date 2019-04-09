@@ -54,7 +54,7 @@ public class ListeningFragment1 extends Fragment {
 
     private RecyclerView recyclerView;
     private ListeningRecyclerViewAdapter listeningRecyclerViewAdapter;
-
+    private int save;
     // Lấy thông tin database hiện tại
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference listeningReference;
@@ -87,6 +87,7 @@ public class ListeningFragment1 extends Fragment {
         listeningReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child("1").child(Constants.LISTENING_NODE);
         recyclerView = view.findViewById(R.id.listening_fragment1_recycler);
     }
+
 
     public void setEvents() {
         getListeningData();
@@ -121,7 +122,6 @@ public class ListeningFragment1 extends Fragment {
             }
         });
     }
-
     public void getListeningData() {
         // Lấy dữ liệu từ firebase trong node
         listeningReference.addValueEventListener(new ValueEventListener() {
@@ -209,7 +209,9 @@ public class ListeningFragment1 extends Fragment {
     }
 
     private void Audiobar(){
-        mediaPlayer = MediaPlayer.create(this.getContext(),R.raw.dancin);
+        getListeningData();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
@@ -223,8 +225,11 @@ public class ListeningFragment1 extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if(b){
+
                     mediaPlayer.seekTo(i);
+                    //changeseekBar();
                 }
+
             }
 
             @Override
@@ -245,26 +250,61 @@ public class ListeningFragment1 extends Fragment {
                 if(mediaPlayer.isPlaying()){
                     mediaPlayer.pause();
                     btnPlay.setImageResource(R.drawable.play);
-                }else {
+                }else{
                     mediaPlayer.start();
                     btnPlay.setImageResource(R.drawable.pause);
                     changeseekBar();
                 }
+
             }
         });
     }
 
     private void changeseekBar() {
-        seekBar.setProgress(mediaPlayer.getCurrentPosition());
+        save = mediaPlayer.getCurrentPosition();
+        seekBar.setProgress(save);
+        final String currentTimer = miliSecondsToTimer(mediaPlayer.getCurrentPosition());
+        final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
         if(mediaPlayer.isPlaying()){
             runnable = new Runnable() {
                 @Override
                 public void run() {
                     changeseekBar();
-                    time.setText(String.valueOf(mediaPlayer.getCurrentPosition())+"/"+mediaPlayer.getDuration());
+                    time.setText(currentTimer + "/" + totalTimer);
                 }
             };
-            handler.postDelayed(runnable,100);
+            handler.postDelayed(runnable,0);
         }
+//        else {
+//                    mediaPlayer.pause();
+//                    runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            changeseekBar();
+//                            time.setText(currentTimer + "/" + totalTimer);
+//                        }
+//                    };
+//                    handler.postDelayed(runnable,0);
+//                }
+
+
+    }
+
+    public String miliSecondsToTimer(long miliseconds){
+        String finalTimerString = "";
+        String secondsString;
+
+        int hours = (int)(miliseconds / (1000*60*60));
+        int minutes = (int)(miliseconds % (1000*60*60)) / (1000*60);
+        int seconds = (int)((miliseconds % (1000*60*60)) % (1000*60) / 1000);
+
+        if(hours > 0){
+            secondsString = "0" + seconds;
+        }else {
+            secondsString = "" + seconds;
+        }
+        finalTimerString = finalTimerString + minutes + ":" +secondsString;
+
+        return finalTimerString;
     }
 }
