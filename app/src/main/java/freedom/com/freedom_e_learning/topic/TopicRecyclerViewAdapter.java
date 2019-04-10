@@ -54,8 +54,9 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
     // Set questions
     @Override
     public void onBindViewHolder(@NonNull TopicRecyclerViewAdapter.RecyclerViewHolder recyclerViewHolder, int position) {
-        recyclerViewHolder.tvTopicTitle.setText("Topic: " + topicList.get(position).getTitle());
-        recyclerViewHolder.tvTopicLevel.setText("Level: " + topicList.get(position).getLevel());
+        final Topic topic = topicList.get(position);
+        recyclerViewHolder.tvTopicTitle.setText("Topic: " + topic.getTitle());
+        recyclerViewHolder.tvTopicLevel.setText("Level: " + topic.getLevel());
         recyclerViewHolder.bmb.setButtonEnum(ButtonEnum.SimpleCircle);
         recyclerViewHolder.bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_4_1);
         recyclerViewHolder.bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_4_2);
@@ -79,10 +80,12 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
                             switch (i) {
                                 case 0:
                                     Intent intentListening = new Intent(context, ListeningActivity.class);
+                                    intentListening.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
                                     context.startActivity(intentListening);
                                     break;
                                 case 1:
                                     Intent intentReading = new Intent(context, ReadingActivity.class);
+                                    intentReading.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
                                     context.startActivity(intentReading);
                                     break;
                                 case 2:

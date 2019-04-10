@@ -10,23 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-
-import freedom.com.freedom_e_learning.Constants;
-import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
-import freedom.com.freedom_e_learning.model.listening.Listening;
 
 public class ListeningFragment2 extends Fragment {
     private TextView txtTranscript;
     private String transcript;
-    private Listening listening;
-
-    DatabaseService databaseService = DatabaseService.getInstance();
-    DatabaseReference listeningReference;
 
     @Nullable
     @Override
@@ -41,7 +29,7 @@ public class ListeningFragment2 extends Fragment {
     public void setControl(View view) {
         txtTranscript = view.findViewById(R.id.txtTranscript);
         txtTranscript.setMovementMethod(new ScrollingMovementMethod());
-        listeningReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child("1").child(Constants.LISTENING_NODE);
+
 
     }
 
@@ -51,20 +39,8 @@ public class ListeningFragment2 extends Fragment {
     }
 
     public void getTranscript() {
-        listeningReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                listening = dataSnapshot.getValue(Listening.class);
-                transcript = listening.getTranscript();
-
-                txtTranscript.setText(transcript);
-                txtTranscript.setTextSize(20);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        transcript = getArguments().getString("Listening_transcript");
+        txtTranscript.setText(transcript);
+        txtTranscript.setTextSize(20);
     }
 }

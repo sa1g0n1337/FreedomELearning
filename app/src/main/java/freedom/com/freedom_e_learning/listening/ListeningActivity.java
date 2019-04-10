@@ -38,40 +38,12 @@ public class ListeningActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        // Set mấy cái tab trong listening nè
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(""));
-        tabLayout.addTab(tabLayout.newTab().setText(""));
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_headset_24dp);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_speaker_notes_24dp);
-
-        // Set fragment nè
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final ListeningFragmentAdapter adapter = new ListeningFragmentAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Log.d("ListeningActivity", String.valueOf(tab.getPosition()));
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        getDataFromFirebase();
     }
 
     public void getDataFromFirebase() {
-        listeningReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child("1").child(Constants.LISTENING_NODE);
+        String topic = getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
+        listeningReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(String.valueOf(topic)).child(Constants.LISTENING_NODE);
         listeningReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -79,6 +51,35 @@ public class ListeningActivity extends AppCompatActivity {
                 // Nhận data từ node listening lưu vào model listening
                 listening = dataSnapshot.getValue(Listening.class);
 
+                // Set mấy cái tab trong listening nè
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+                tabLayout.addTab(tabLayout.newTab().setText(""));
+                tabLayout.addTab(tabLayout.newTab().setText(""));
+                tabLayout.getTabAt(0).setIcon(R.drawable.ic_headset_24dp);
+                tabLayout.getTabAt(1).setIcon(R.drawable.ic_speaker_notes_24dp);
+
+                // Set fragment nè
+                final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+                final ListeningFragmentAdapter adapter = new ListeningFragmentAdapter(getSupportFragmentManager(), listening);
+                viewPager.setAdapter(adapter);
+                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        Log.d("ListeningActivity", String.valueOf(tab.getPosition()));
+                        viewPager.setCurrentItem(tab.getPosition());
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+
+                    }
+                });
 
             }
 

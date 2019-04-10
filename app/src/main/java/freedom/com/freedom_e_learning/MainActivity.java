@@ -108,34 +108,6 @@ public class MainActivity extends AppCompatActivity
     private void setEvents() {
         getUserID();
         setUserInfo();
-
-//        Button button = findViewById(R.id.btn_listening);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, ListeningActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        Button test = findViewById(R.id.btn_test);
-//        test.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, TestActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        Button reading = findViewById(R.id.btn_reading);
-//        reading.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, ReadingActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
     }
 
     public class LoadDataTask extends AsyncTask<Void, Void, Void> {

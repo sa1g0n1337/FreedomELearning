@@ -39,7 +39,9 @@ public class ReadingActivity extends AppCompatActivity {
     }
 
     public void getDataFromFirebase() {
-        readingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child("1").child(Constants.READING_NODE);
+
+        String topic = (String) getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
+        readingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(topic).child(Constants.READING_NODE);
         readingReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
