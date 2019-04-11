@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,19 +28,17 @@ public class ReadingFragment1 extends Fragment {
         View view = inflater.inflate(R.layout.reading_fragment1, container, false);
 
         setControl(view);
-        setEvents();
         return view;
 
     }
 
     public void setControl(View view) {
-        readingArticle = getArguments().getString("Reading_article");
+        readingArticle = getArguments().getString(getString(R.string.READING_ARTICLE));
         progressDialog = new ProgressDialog(getActivity());
         // Lấy tạo đường dẫn tới node listening của topic 1, sau này sẽ set id của topic dynamic
         txtReadingArticle = view.findViewById(R.id.tv_reading_article);
-    }
-
-    public void setEvents() {
+        txtReadingArticle.setMovementMethod(new ScrollingMovementMethod());
         txtReadingArticle.setText(readingArticle);
     }
+
 }

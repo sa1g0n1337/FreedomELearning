@@ -28,9 +28,9 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
-        View v;
-        v = LayoutInflater.from(context).inflate(R.layout.listening_item_fragment1, viewGroup, false);
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(v);
+        View view;
+        view = LayoutInflater.from(context).inflate(R.layout.listening_item_fragment1, viewGroup, false);
+        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
         return recyclerViewHolder;
     }
 

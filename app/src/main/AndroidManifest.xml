@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".reading.ReadingActivity"></activity>
+        <activity android:name=".writing.WritingActivity"></activity>
+        <activity android:name=".reading.ReadingActivity" />
         <activity android:name=".model.setup.SetupTopicActivity" />
         <activity android:name=".TestActivity" />
         <activity android:name=".listening.ListeningActivity" />
