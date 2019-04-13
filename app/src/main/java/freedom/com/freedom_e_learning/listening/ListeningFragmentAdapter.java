@@ -11,18 +11,17 @@ public class ListeningFragmentAdapter extends FragmentPagerAdapter {
 
     public final static int FRAGMENT_COUNT = 2;
     private Listening listening;
-//    private String mUserID = "";
 
-    public ListeningFragmentAdapter(FragmentManager fm, Listening listening) {
-        super(fm);
+    public ListeningFragmentAdapter(FragmentManager fragmentManager, Listening listening) {
+        super(fragmentManager);
         this.listening = listening;
-//        this.mUserID = userID;
     }
 
     @Override
     public Fragment getItem(int position) {
         Bundle bundle = new Bundle();
 
+//        Gửi argument tới fragment
         switch (position) {
             case 0:
                 ListeningFragment1 tab1 = new ListeningFragment1();

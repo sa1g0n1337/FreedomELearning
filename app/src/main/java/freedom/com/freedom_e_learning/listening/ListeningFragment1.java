@@ -71,7 +71,6 @@ public class ListeningFragment1 extends Fragment {
         getListeningData();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
         // Tạo adaper cho recyclerview cho mấy câu trắc nghiệm của listening
         listeningRecyclerViewAdapter = new ListeningRecyclerViewAdapter(getContext(), listeningQuestions);
         recyclerView.setAdapter(listeningRecyclerViewAdapter);
@@ -79,7 +78,7 @@ public class ListeningFragment1 extends Fragment {
 
     public void getListeningData() {
         listeningQuestions = (ArrayList<ListeningQuestion>) getArguments().getSerializable("Listening_questions");
-        audioUrl = getArguments().getString("Listening_audio");
+        audioUrl = getArguments().getString(getString(R.string.LISTENING_AUDIO));
     }
 
 

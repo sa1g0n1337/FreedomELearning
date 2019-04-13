@@ -25,6 +25,7 @@ import freedom.com.freedom_e_learning.listening.ListeningActivity;
 import freedom.com.freedom_e_learning.model.topic.Topic;
 import freedom.com.freedom_e_learning.reading.ReadingActivity;
 import freedom.com.freedom_e_learning.speaking.SpeakingActivity;
+import freedom.com.freedom_e_learning.writing.WritingActivity;
 
 public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecyclerViewAdapter.RecyclerViewHolder> {
 

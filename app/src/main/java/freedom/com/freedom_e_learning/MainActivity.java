@@ -45,13 +45,16 @@ public class MainActivity extends AppCompatActivity
 
 //    UserSessionManager session = new UserSessionManager(getApplicationContext());
 
+
     private CircleImageView imgAvatar;
     private TextView txtUsername;
     private TextView txtEmail;
-    FirebaseUser user;
-    RecyclerView rv_topics;
-    ArrayList<Topic> topicList = new ArrayList<>();
+    private RecyclerView rv_topics;
+    private ArrayList<Topic> topicList = new ArrayList<>();
     private TopicRecyclerViewAdapter topicRecyclerViewAdapter;
+
+    //    Firebase
+    FirebaseUser user;
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference topicReference;
 
@@ -63,7 +66,6 @@ public class MainActivity extends AppCompatActivity
 
         setControl();
         setEvents();
-        Log.d(TAG, String.valueOf(databaseService.isSignIn()));
         new LoadDataTask().execute();
 
     }
@@ -71,24 +73,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-
-//        mGoogleApiClient.connect();
     }
 
     private void setControl() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         View headerView = navigationView.getHeaderView(0);
         imgAvatar = headerView.findViewById(R.id.imageAvatar);
         txtUsername = headerView.findViewById(R.id.txtUsername);
@@ -120,6 +116,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void getTopicsFromFireBase() {
+//        Lấy đường dẫn tới node topic trong firebase
         topicReference = databaseService.getDatabase().child(Constants.TOPIC_NODE);
         topicReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -135,6 +132,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getData(DataSnapshot dataSnapshot) {
+//        Lấy hết tất cả topics thêm vào topic list
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             Topic topic = ds.getValue(Topic.class);
             topicList.add(topic);
@@ -223,7 +221,6 @@ public class MainActivity extends AppCompatActivity
         String email = user.getEmail();
         String userName = user.getDisplayName();
         Uri linkPhoto = user.getPhotoUrl();
-
         txtUsername.setText(userName);
         txtEmail.setText(email);
         Glide.with(imgAvatar).load(linkPhoto).into(imgAvatar);

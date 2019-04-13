@@ -22,23 +22,12 @@ public class ListeningFragment2 extends Fragment {
         View view = inflater.inflate(R.layout.listening_fragment2, container, false);
 
         setControl(view);
-        setEvent();
         return view;
     }
 
     public void setControl(View view) {
         txtTranscript = view.findViewById(R.id.txtTranscript);
         txtTranscript.setMovementMethod(new ScrollingMovementMethod());
-
-
-    }
-
-    public void setEvent() {
-        getTranscript();
-
-    }
-
-    public void getTranscript() {
         transcript = getArguments().getString("Listening_transcript");
         txtTranscript.setText(transcript);
         txtTranscript.setTextSize(20);
