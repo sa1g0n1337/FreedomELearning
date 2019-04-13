@@ -96,6 +96,9 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
                                     context.startActivity(intentWriting);
                                     break;
                                 case 3:
+                                    Intent intentSpeaking = new Intent(context, SpeakingActivity.class);
+                                    intentSpeaking.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
+                                    context.startActivity(intentSpeaking);
                                     break;
                             }
                         }
