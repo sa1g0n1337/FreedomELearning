@@ -15,7 +15,6 @@ import com.google.firebase.database.ValueEventListener;
 import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
-
 import freedom.com.freedom_e_learning.model.speaking.Speaking;
 
 public class SpeakingActivity extends AppCompatActivity {
@@ -52,8 +51,10 @@ public class SpeakingActivity extends AppCompatActivity {
                 // Set mấy cái tab trong listening nè
                 TabLayout tabLayout = (TabLayout) findViewById(R.id.speaking_tab_layout);
                 tabLayout.addTab(tabLayout.newTab().setText(""));
+                tabLayout.addTab(tabLayout.newTab().setText(""));
 
-                tabLayout.getTabAt(0).setIcon(R.drawable.ic_description_24dp);
+                tabLayout.getTabAt(0).setIcon(R.drawable.ic_mic_24dp);
+                tabLayout.getTabAt(1).setIcon(R.drawable.ic_comment_24dp);
 
 
                 // Set fragment nè

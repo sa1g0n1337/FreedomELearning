@@ -5,12 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-
 import freedom.com.freedom_e_learning.model.speaking.Speaking;
 
 
 public class SpeakingFragmentAdapter extends FragmentPagerAdapter {
-    public final static int FRAGMENT_COUNT = 1;
+    public final static int FRAGMENT_COUNT = 2;
     private Speaking speaking;
 
     public SpeakingFragmentAdapter(FragmentManager fragmentManager, Speaking speaking) {
@@ -28,6 +27,9 @@ public class SpeakingFragmentAdapter extends FragmentPagerAdapter {
                 bundle.putString("Speaking_article", speaking.getQuestion());
                 tab1.setArguments(bundle);
                 return tab1;
+            case 1:
+                SpeakingFragment2 tab2 = new SpeakingFragment2();
+                return tab2;
             default:
                 return null;
         }
