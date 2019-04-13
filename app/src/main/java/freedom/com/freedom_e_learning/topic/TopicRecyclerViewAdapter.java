@@ -56,21 +56,21 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
     @Override
     public void onBindViewHolder(@NonNull TopicRecyclerViewAdapter.RecyclerViewHolder recyclerViewHolder, int position) {
         final Topic topic = topicList.get(position);
-        recyclerViewHolder.tvTopicTitle.setText("Topic: " + topic.getTitle());
-        recyclerViewHolder.tvTopicLevel.setText("Level: " + topic.getLevel());
-        recyclerViewHolder.bmb.setButtonEnum(ButtonEnum.SimpleCircle);
-        recyclerViewHolder.bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_4_1);
-        recyclerViewHolder.bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_4_2);
-        recyclerViewHolder.bmb.setShowDelay(0);
-        recyclerViewHolder.bmb.setShowDuration(1000);
-        recyclerViewHolder.bmb.setRotateDegree(1080);
-        recyclerViewHolder.bmb.setHideDelay(0);
-        recyclerViewHolder.bmb.setHideDuration(500);
-        recyclerViewHolder.bmb.setFrames(80);
-        recyclerViewHolder.bmb.setUse3DTransformAnimation(true);
-        recyclerViewHolder.bmb.setBoomEnum(BoomEnum.PARABOLA_3);
+        recyclerViewHolder.tv_topic_title.setText(String.format("Topic: %s", topic.getTitle()));
+        recyclerViewHolder.tv_topic_level.setText(String.format("Level: %s", topic.getLevel()));
+        recyclerViewHolder.boomMenuButton.setButtonEnum(ButtonEnum.SimpleCircle);
+        recyclerViewHolder.boomMenuButton.setPiecePlaceEnum(PiecePlaceEnum.DOT_4_1);
+        recyclerViewHolder.boomMenuButton.setButtonPlaceEnum(ButtonPlaceEnum.SC_4_2);
+        recyclerViewHolder.boomMenuButton.setShowDelay(0);
+        recyclerViewHolder.boomMenuButton.setShowDuration(1000);
+        recyclerViewHolder.boomMenuButton.setRotateDegree(1080);
+        recyclerViewHolder.boomMenuButton.setHideDelay(0);
+        recyclerViewHolder.boomMenuButton.setHideDuration(500);
+        recyclerViewHolder.boomMenuButton.setFrames(80);
+        recyclerViewHolder.boomMenuButton.setUse3DTransformAnimation(true);
+        recyclerViewHolder.boomMenuButton.setBoomEnum(BoomEnum.PARABOLA_3);
 
-        for (int i = 0; i < recyclerViewHolder.bmb.getPiecePlaceEnum().pieceNumber(); i++) {
+        for (int i = 0; i < recyclerViewHolder.boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++) {
             SimpleCircleButton.Builder builder = new SimpleCircleButton.Builder()
                     .normalImageRes(imageIDList.get(i))
                     .highlightedImageRes(imageIDList.get(i))
@@ -90,17 +90,16 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
                                     context.startActivity(intentReading);
                                     break;
                                 case 2:
-
+                                    Intent intentWriting = new Intent(context, WritingActivity.class);
+                                    intentWriting.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
+                                    context.startActivity(intentWriting);
                                     break;
                                 case 3:
-                                    Intent intentSpeaking = new Intent(context, SpeakingActivity.class);
-                                    intentSpeaking.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
-                                    context.startActivity(intentSpeaking);
                                     break;
                             }
                         }
                     });
-            recyclerViewHolder.bmb.addBuilder(builder);
+            recyclerViewHolder.boomMenuButton.addBuilder(builder);
         }
     }
 
@@ -116,15 +115,15 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvTopicTitle;
-        private TextView tvTopicLevel;
-        BoomMenuButton bmb;
+        private TextView tv_topic_title;
+        private TextView tv_topic_level;
+        BoomMenuButton boomMenuButton;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-            bmb = itemView.findViewById(R.id.BoomMenu);
-            tvTopicTitle = itemView.findViewById(R.id.tv_topic_title);
-            tvTopicLevel = itemView.findViewById(R.id.tv_topic_level);
+            boomMenuButton = itemView.findViewById(R.id.BoomMenu);
+            tv_topic_title = itemView.findViewById(R.id.tv_topic_title);
+            tv_topic_level = itemView.findViewById(R.id.tv_topic_level);
 
         }
     }
