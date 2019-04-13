@@ -22,6 +22,7 @@
         <activity android:name=".model.setup.SetupTopicActivity" />
         <activity android:name=".TestActivity" />
         <activity android:name=".listening.ListeningActivity" />
+        <activity android:name=".speaking.SpeakingActivity"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
