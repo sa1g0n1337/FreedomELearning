@@ -24,6 +24,7 @@ import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.listening.ListeningActivity;
 import freedom.com.freedom_e_learning.model.topic.Topic;
 import freedom.com.freedom_e_learning.reading.ReadingActivity;
+import freedom.com.freedom_e_learning.speaking.SpeakingActivity;
 
 public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecyclerViewAdapter.RecyclerViewHolder> {
 
@@ -89,8 +90,12 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
                                     context.startActivity(intentReading);
                                     break;
                                 case 2:
+
                                     break;
                                 case 3:
+                                    Intent intentSpeaking = new Intent(context, SpeakingActivity.class);
+                                    intentSpeaking.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
+                                    context.startActivity(intentSpeaking);
                                     break;
                             }
                         }
