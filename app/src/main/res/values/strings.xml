@@ -12,6 +12,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="TOPIC_ID">TOPIC</string>
+    <string name="User_ID">USER</string>
     <string name="READING_ARTICLE">Reading_article</string>
     <string name="WRITING_QUESTION">Writing_Question</string>
     <string name="LISTENING_AUDIO">Listening_audio</string>

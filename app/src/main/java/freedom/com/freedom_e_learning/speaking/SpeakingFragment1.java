@@ -1,8 +1,9 @@
 package freedom.com.freedom_e_learning.speaking;
 
 import android.app.ProgressDialog;
-import android.graphics.Color;
+import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,25 +11,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
-import com.devlomi.record_view.OnBasketAnimationEnd;
-import com.devlomi.record_view.OnRecordListener;
-import com.devlomi.record_view.RecordButton;
-import com.devlomi.record_view.RecordView;
-
-import java.util.concurrent.TimeUnit;
+import java.io.IOException;
 
 import freedom.com.freedom_e_learning.R;
 
 public class SpeakingFragment1 extends Fragment {
     private ProgressDialog progressDialog;
     private TextView txtSpeakingArticle;
+    private Integer topic;
+    private String uid;
     private String speakingArticle;
-    RecordView recordView;
-    RecordButton recordButton;
-
+    private TextView txtRecordLabel;
+    private Button btnRecord;
+    private Button btnPlay;
+    private Button btnDelete;
+    private Button btnUpload;
+    private MediaRecorder myAudioRecorder;
+    private String outputFile;
+    private static final String LOG_TAG = "Record_log";
 
     @Nullable
     @Override
@@ -41,71 +45,71 @@ public class SpeakingFragment1 extends Fragment {
     }
     public void setControl(View view) {
         speakingArticle = getArguments().getString("Speaking_article");
+        topic = getArguments().getInt("Speaking_topic");
+//        uid = getArguments().getString("User ID"); //nhận UID
+        Log.d("Speaking Topic", String.valueOf(topic));
+//        Log.d("User ID", uid);
         progressDialog = new ProgressDialog(getActivity());
         // Lấy tạo đường dẫn tới node listening của topic 1, sau này sẽ set id của topic dynamic
         txtSpeakingArticle = view.findViewById(R.id.speaking_question);
-        recordView = (RecordView) view.findViewById(R.id.record_view);
-        recordButton = (RecordButton) view.findViewById(R.id.record_button);
+        txtRecordLabel = view.findViewById(R.id.txtRecord);
+        btnRecord = view.findViewById(R.id.btnRecord);
+        btnPlay = view.findViewById(R.id.btnPlay_Record);
+        btnDelete = view.findViewById(R.id.btnDelete_Record);
+        btnUpload = view.findViewById(R.id.btnUpload_Record);
+        myAudioRecorder = new MediaRecorder();
+        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
     public void setEvents() {
         txtSpeakingArticle.setText(speakingArticle);
-        //IMPORTANT
-        recordButton.setRecordView(recordView);
-        recordButton.setListenForRecord(true);
-        //Cancel Bounds is when the Slide To Cancel text gets before the timer . default is 8
-        recordView.setCancelBounds(8);
-
-
-        recordView.setSmallMicColor(Color.parseColor("#c2185b"));
-
-        //prevent recording under one Second
-        recordView.setLessThanSecondAllowed(false);
-
-
-        recordView.setSlideToCancelText("Slide To Cancel");
-
-
-        recordView.setCustomSounds(R.raw.record_start, R.raw.record_finished, 0);
-        recordView.setOnRecordListener(new OnRecordListener() {
+        btnPlay.setEnabled(false);
+        btnDelete.setEnabled(false);
+        btnUpload.setEnabled(false);
+        btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onStart() {
-                Log.d("RecordView", "onStart");
-//                Toast.makeText(SpeakingActivity.this, "OnStartRecord", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d("RecordView", "onCancel");
-            }
-
-            @Override
-            public void onFinish(long recordTime) {
-                String time = getHumanTimeText(recordTime);
-//                Toast.makeText(SpeakingActivity.this, "onFinishRecord - Recorded Time is: " + time, Toast.LENGTH_SHORT).show();
-                Log.d("RecordView", "onFinish");
-
-                Log.d("RecordTime", time);
-            }
-
-            @Override
-            public void onLessThanSecond() {
-//                Toast.makeText(SpeakingActivity.this, "OnLessThanSecond", Toast.LENGTH_SHORT).show();
-                Log.d("RecordView", "onLessThanSecond");
+            public void onClick(View v) {
+                if(btnRecord.getText().toString().equals("start record")){
+                    btnRecord.setText("stop record");
+                    startRecording();
+                }
+                else if(btnRecord.getText().toString().equals("stop record")){
+                    btnRecord.setText("start record");
+                    stopRecording();
+                    btnPlay.setEnabled(true);
+                    btnDelete.setEnabled(true);
+                    btnUpload.setEnabled(true);
+                }
             }
         });
-        recordView.setOnBasketAnimationEndListener(new OnBasketAnimationEnd() {
+        btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onAnimationEnd() {
-                Log.d("RecordView", "Basket Animation Finished");
+            public void onClick(View v) {
+                if(btnPlay.getText().toString().equals("play record")){
+                    btnPlay.setText("stop record");
+                }
+                else if(btnPlay.getText().toString().equals("stop record")){
+                    btnPlay.setText("play record");
+                }
             }
         });
     }
-    private String getHumanTimeText(long milliseconds) {
-        return String.format("%02d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(milliseconds),
-                TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
+
+    private void startRecording(){
+        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+        myAudioRecorder.setOutputFile(outputFile);
+        try{
+            myAudioRecorder.prepare();
+        }catch (IOException e){
+            Log.e(LOG_TAG, "prepare() failed");
+        }
+        myAudioRecorder.start();
+    }
+
+    private  void stopRecording(){
+        myAudioRecorder.stop();
+        myAudioRecorder.release();
+        myAudioRecorder = null;
     }
 }

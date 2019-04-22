@@ -15,11 +15,13 @@ import com.google.firebase.database.ValueEventListener;
 import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
+import freedom.com.freedom_e_learning.model.User;
 import freedom.com.freedom_e_learning.model.speaking.Speaking;
 
 public class SpeakingActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Speaking speaking;
+    private User user;
 
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference speakingReference;
@@ -38,16 +40,14 @@ public class SpeakingActivity extends AppCompatActivity {
     }
 
     public void getDataFromFirebase() {
-
         String topic = (String) getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
         speakingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(topic).child(Constants.SPEAKING_NODE);
         speakingReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 // Nhận data từ node speaking lưu vào model speaking
                 speaking = dataSnapshot.getValue(Speaking.class);
-
+                user = dataSnapshot.getValue(User.class);
                 // Set mấy cái tab trong listening nè
                 TabLayout tabLayout = (TabLayout) findViewById(R.id.speaking_tab_layout);
                 tabLayout.addTab(tabLayout.newTab().setText(""));
@@ -56,10 +56,9 @@ public class SpeakingActivity extends AppCompatActivity {
                 tabLayout.getTabAt(0).setIcon(R.drawable.ic_mic_24dp);
                 tabLayout.getTabAt(1).setIcon(R.drawable.ic_comment_24dp);
 
-
                 // Set fragment nè
                 final ViewPager viewPager = findViewById(R.id.speaking_pager);
-                SpeakingFragmentAdapter adapter = new SpeakingFragmentAdapter(getSupportFragmentManager(), speaking);
+                SpeakingFragmentAdapter adapter = new SpeakingFragmentAdapter(getSupportFragmentManager(), speaking, user);
                 viewPager.setAdapter(adapter);
                 viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
                 tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
