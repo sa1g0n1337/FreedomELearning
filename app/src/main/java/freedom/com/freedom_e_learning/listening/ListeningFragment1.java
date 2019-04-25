@@ -1,6 +1,7 @@
 package freedom.com.freedom_e_learning.listening;
 
 import android.app.ProgressDialog;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,10 +17,14 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import freedom.com.freedom_e_learning.MainActivity;
 import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.model.listening.ListeningQuestion;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class ListeningFragment1 extends Fragment {
@@ -63,8 +68,9 @@ public class ListeningFragment1 extends Fragment {
         time = view.findViewById(R.id.Time);
         handler = new Handler();
 
-
         recyclerView = view.findViewById(R.id.listening_fragment1_recycler);
+
+
     }
 
     public void setEvents() {
@@ -82,16 +88,21 @@ public class ListeningFragment1 extends Fragment {
     }
 
 
-    private void Audiobar() {
-        mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.dancin);
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                seekBar.setMax(mediaPlayer.getDuration());
-                changeseekBar();
-
-            }
-        });
+    private void Audiobar(){
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mediaPlayer.setDataSource(audioUrl);
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    seekBar.setMax(mediaPlayer.getDuration());
+                    changeseekBar();
+                }
+            });
+            mediaPlayer.prepare();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -101,9 +112,7 @@ public class ListeningFragment1 extends Fragment {
                     mediaPlayer.seekTo(i);
                     //changeseekBar();
                 }
-
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 

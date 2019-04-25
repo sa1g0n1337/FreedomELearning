@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -30,10 +32,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+//import com.sackcentury.*;
+import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.util.Arrays;
 
 import freedom.com.freedom_e_learning.model.User;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -43,6 +49,8 @@ public class SignInActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     LoginButton loginButton;
     SignInButton signInButton;
+    private Button fb, gg;
+    private ShineButton fblogin;
     public GoogleSignInClient mGoogleSignInClient;
     private DatabaseService mData = DatabaseService.getInstance();
     private FirebaseAuth mFirebaseAuth;
@@ -74,16 +82,36 @@ public class SignInActivity extends AppCompatActivity {
             finish();
         }
     }
+    ;
+
+
+
+    public void onClickFacebookButton(View view) {
+        if (view == fb) {
+            loginButton.performClick();
+        }
+    }
 
     public void setControl() {
         callbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.login_button);
-        signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+
+//      signInButton = findViewById(R.id.sign_in_button);
+//      fb = findViewById(R.id.fb);
+//      gg = findViewById(R.id.gg);
+//      signInButton.setSize(SignInButton.SIZE_STANDARD);
 
         // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+//      mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        fblogin = (ShineButton) findViewById(R.id.fblogin);
+        fblogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginButton.performClick();
+            }
+        });
     }
+
 
     public void setEvents() {
         loginFacebook();
