@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     private TextView txtUsername;
     private TextView txtEmail;
     private RecyclerView rv_topics;
+    private String mUserID;
     private ArrayList<Topic> topicList = new ArrayList<>();
     private TopicRecyclerViewAdapter topicRecyclerViewAdapter;
 
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setControl() {
+        getUserID();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -95,14 +97,13 @@ public class MainActivity extends AppCompatActivity
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv_topics.setLayoutManager(linearLayoutManager);
 
-        topicRecyclerViewAdapter = new TopicRecyclerViewAdapter(this);
+        topicRecyclerViewAdapter = new TopicRecyclerViewAdapter(this, mUserID);
         topicRecyclerViewAdapter.setTopicList(topicList);
         rv_topics.setAdapter(topicRecyclerViewAdapter);
 
     }
 
     private void setEvents() {
-        getUserID();
         setUserInfo();
     }
 
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity
     private void getUserID() {
         Intent intent = getIntent();
         if (intent.hasExtra(Constants.USER_ID)) {
-            String mUserID = intent.getStringExtra(Constants.USER_ID);
+            mUserID = intent.getStringExtra(Constants.USER_ID);
         }
     }
 

@@ -12,12 +12,12 @@ import freedom.com.freedom_e_learning.model.speaking.Speaking;
 public class SpeakingFragmentAdapter extends FragmentPagerAdapter {
     public final static int FRAGMENT_COUNT = 2;
     private Speaking speaking;
-    private User user;
+    private String userId;
 
-    public SpeakingFragmentAdapter(FragmentManager fragmentManager, Speaking speaking, User user) {
+    public SpeakingFragmentAdapter(FragmentManager fragmentManager, Speaking speaking, String userId) {
         super(fragmentManager);
         this.speaking = speaking;
-        this.user = user;
+        this.userId = userId;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class SpeakingFragmentAdapter extends FragmentPagerAdapter {
                 SpeakingFragment1 tab1 = new SpeakingFragment1();
                 bundle.putString("Speaking_article", speaking.getQuestion());
                 bundle.putInt("Speaking_topic", speaking.getTopic());
-//                bundle.putString("User ID", user.getUid()); //Lấy UID truyền qua fragment1
+                bundle.putString("User ID", userId); //Lấy UID truyền qua fragment1
                 tab1.setArguments(bundle);
                 return tab1;
             case 1:

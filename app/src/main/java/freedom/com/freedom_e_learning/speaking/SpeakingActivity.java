@@ -1,5 +1,6 @@
 package freedom.com.freedom_e_learning.speaking;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -21,7 +22,7 @@ import freedom.com.freedom_e_learning.model.speaking.Speaking;
 public class SpeakingActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Speaking speaking;
-    private User user;
+    String userId;
 
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference speakingReference;
@@ -40,6 +41,10 @@ public class SpeakingActivity extends AppCompatActivity {
     }
 
     public void getDataFromFirebase() {
+        Intent userIdIntent = getIntent();
+        if (userIdIntent.hasExtra(Constants.USER_ID)) {
+            userId = userIdIntent.getStringExtra(Constants.USER_ID);
+        }
         String topic = (String) getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
         speakingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(topic).child(Constants.SPEAKING_NODE);
         speakingReference.addValueEventListener(new ValueEventListener() {
@@ -47,7 +52,6 @@ public class SpeakingActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Nhận data từ node speaking lưu vào model speaking
                 speaking = dataSnapshot.getValue(Speaking.class);
-                user = dataSnapshot.getValue(User.class);
                 // Set mấy cái tab trong listening nè
                 TabLayout tabLayout = (TabLayout) findViewById(R.id.speaking_tab_layout);
                 tabLayout.addTab(tabLayout.newTab().setText(""));
@@ -58,7 +62,7 @@ public class SpeakingActivity extends AppCompatActivity {
 
                 // Set fragment nè
                 final ViewPager viewPager = findViewById(R.id.speaking_pager);
-                SpeakingFragmentAdapter adapter = new SpeakingFragmentAdapter(getSupportFragmentManager(), speaking, user);
+                SpeakingFragmentAdapter adapter = new SpeakingFragmentAdapter(getSupportFragmentManager(), speaking, userId);
                 viewPager.setAdapter(adapter);
                 viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
                 tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
