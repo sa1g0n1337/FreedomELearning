@@ -1,5 +1,6 @@
 package freedom.com.freedom_e_learning.topic;
 
+import freedom.com.freedom_e_learning.Constants;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 
 import java.util.ArrayList;
 
+import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.listening.ListeningActivity;
 import freedom.com.freedom_e_learning.model.topic.Topic;
@@ -31,17 +33,19 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
 
 
     Context context;
+    String userId;
     ArrayList<Topic> topicList = new ArrayList<>();
     ArrayList<Integer> imageIDList;
 
 
-    public TopicRecyclerViewAdapter(Context context) {
+    public TopicRecyclerViewAdapter(Context context, String mUserID) {
         this.context = context;
         imageIDList = new ArrayList<>();
         imageIDList.add(R.drawable.ic_headset_24dp);
         imageIDList.add(R.drawable.ic_description_24dp);
         imageIDList.add(R.drawable.ic_edit_24dp);
         imageIDList.add(R.drawable.ic_mic_24dp);
+        this.userId = mUserID;
     }
 
     @NonNull
@@ -98,6 +102,7 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
                                 case 3:
                                     Intent intentSpeaking = new Intent(context, SpeakingActivity.class);
                                     intentSpeaking.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
+                                    intentSpeaking.putExtra(Constants.USER_ID, userId);
                                     context.startActivity(intentSpeaking);
                                     break;
                             }
