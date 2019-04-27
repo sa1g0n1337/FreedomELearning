@@ -1,8 +1,11 @@
 package freedom.com.freedom_e_learning.speaking;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -15,17 +18,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.File;
-import java.util.Date;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
 import freedom.com.freedom_e_learning.R;
 
 public class SpeakingFragment1 extends Fragment {
     private String path;
     private File file;
-    private int n;
     private ProgressDialog progressDialog;
     private TextView txtSpeakingArticle;
     private Integer topic;
@@ -42,6 +51,7 @@ public class SpeakingFragment1 extends Fragment {
     private String outputFile;
     private static final String LOG_TAG = "Record_log";
     private MediaPlayer audioPlayer;
+    private StorageReference storageReference;
 
     @Nullable
     @Override
@@ -64,13 +74,12 @@ public class SpeakingFragment1 extends Fragment {
         btnPlay = view.findViewById(R.id.btnPlay_Record);
         btnDelete = view.findViewById(R.id.btnDelete_Record);
         btnUpload = view.findViewById(R.id.btnUpload_Record);
-        myAudioRecorder = new MediaRecorder();
-        date= new Date();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        date = new Date();
         path = Environment.getExternalStorageDirectory().getAbsolutePath();
         path += "/";
         time = date.getTime();
-        outputFile = path + time +"_0"+".3gp";
-        audioPlayer = new MediaPlayer();
+        outputFile = path + time + "_" + String.valueOf(topic) + "_" + uid + ".3gp";
     }
 
     public void setEvents() {
@@ -78,35 +87,24 @@ public class SpeakingFragment1 extends Fragment {
         btnPlay.setEnabled(false);
         btnDelete.setEnabled(false);
         btnUpload.setEnabled(false);
+
         btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btnRecord.getText().toString().equals("start record")){
-                    n = 0;
-                    file = new File(outputFile);
-                    if(file.exists()){
-                        file.delete();
-                        time = date.getTime();
-                        n++;
-                        outputFile = path + time +"_"+ String.valueOf(n) + ".3gp";
-                    }
-                    Log.d("File path: ", outputFile);
+                if (btnRecord.getText().toString().equals("start record")) {
                     startRecording();
                     btnRecord.setText("stop record");
                     txtRecordLabel.setText("Tab button for stop record ...");
-                }
-                else if(btnRecord.getText().toString().equals("stop record")){
+                    btnPlay.setEnabled(false);
+                    btnDelete.setEnabled(false);
+                    btnUpload.setEnabled(false);
+                } else if (btnRecord.getText().toString().equals("stop record")) {
                     stopRecording();
                     btnRecord.setText("start record");
                     txtRecordLabel.setText("Tab button for record ...");
                     btnPlay.setEnabled(true);
                     btnDelete.setEnabled(true);
                     btnUpload.setEnabled(true);
-                    try {
-                        audioPlayer.setDataSource(outputFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         });
@@ -114,39 +112,211 @@ public class SpeakingFragment1 extends Fragment {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btnPlay.getText().toString().equals("play record")){
-                    try {
-                        audioPlayer.prepare();
-                        audioPlayer.start();
-                        btnPlay.setText("stop record");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else if(btnPlay.getText().toString().equals("stop record")){
+                if (btnPlay.getText().toString().equals("play record")) {
+                    btnPlay.setText("stop record");
+                    btnRecord.setEnabled(false);
+                    btnUpload.setEnabled(false);
+                    btnDelete.setEnabled(false);
+                    playAudio();
+                } else if (btnPlay.getText().toString().equals("stop record")) {
                     btnPlay.setText("play record");
-                    audioPlayer.stop();
+                    btnRecord.setEnabled(true);
+                    btnUpload.setEnabled(true);
+                    btnDelete.setEnabled(true);
+                    stopAudio();
                 }
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteFile();
+            }
+        });
+
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadAudio();
             }
         });
     }
 
-    private void startRecording(){
-        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        myAudioRecorder.setOutputFile(outputFile);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        try{
-            myAudioRecorder.prepare();
-        }catch (IOException e){
-            Log.e(LOG_TAG, "prepare() failed");
+    private void startRecording() {
+        file = new File(outputFile);
+        if (file.exists()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Alert!!!");
+            builder.setMessage("The recording file already exists. Do you want to delete and start recording again?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    file.delete();
+                    date = null;
+                    date = new Date();
+                    time = date.getTime();
+                    outputFile = path + time + "_" + String.valueOf(topic) + "_" + uid + ".3gp";
+                    myAudioRecorder = new MediaRecorder();
+                    myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                    myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                    myAudioRecorder.setOutputFile(outputFile);
+                    myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                    try {
+                        myAudioRecorder.prepare();
+                    } catch (IOException e) {
+                        Log.e(LOG_TAG, "prepare() failed");
+                    }
+                    myAudioRecorder.start();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+            builder.create().show();
+        } else {
+            myAudioRecorder = new MediaRecorder();
+            myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            myAudioRecorder.setOutputFile(outputFile);
+            myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            try {
+                myAudioRecorder.prepare();
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "prepare() failed");
+            }
+            myAudioRecorder.start();
         }
-        myAudioRecorder.start();
     }
 
-    private  void stopRecording(){
+    private void stopRecording() {
         myAudioRecorder.stop();
         myAudioRecorder.release();
         myAudioRecorder = null;
     }
+
+    private void playAudio() {
+        try {
+            audioPlayer = new MediaPlayer();
+            audioPlayer.setDataSource(outputFile);
+            audioPlayer.prepare();
+            audioPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void stopAudio() {
+        audioPlayer.stop();
+        audioPlayer.release();
+        audioPlayer = null;
+    }
+
+    private void deleteFile() {
+        file = new File(outputFile);
+        if (file.exists()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Alert!!!");
+            builder.setMessage("Do you want to delete recording file?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    file.delete();
+                    btnPlay.setEnabled(false);
+                    btnDelete.setEnabled(false);
+                    btnUpload.setEnabled(false);
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+            builder.create().show();
+        }
+    }
+
+    private boolean checkFirebaseFileExists(){
+        final boolean[] check = new boolean[1];
+        final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Speaking").child("Topic " + String.valueOf(topic)).child(uid).child("Speaking_file.3gp");
+        storageReference.getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        check[0] = true;
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        int errorCode = ((StorageException) e).getErrorCode();
+                        if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND){
+                            check[0] = false;
+                        }
+                    }
+                });
+        return check[0];
+    }
+
+    private void uploadAudio() {
+        file = new File(outputFile);
+        if (file.exists()) {
+//            if(checkFirebaseFileExists()){
+//                // Create a storage reference from our app
+//                StorageReference storageRef = storage.getReference();
+//
+//                // Create a reference to the file to delete
+//                StorageReference desertRef = storageRef.child("images/desert.jpg");
+//
+//                // Delete the file
+//                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        // File deleted successfully
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        // Uh-oh, an error occurred!
+//                    }
+//                });
+            }
+            else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Alert!!!");
+                builder.setMessage("Do you want to delete recording file?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        progressDialog.setMessage("Uploading Audio ...");
+                        progressDialog.show();
+                        file = new File(outputFile);
+                        StorageReference filePath = storageReference.child("Speaking").child("Topic " + String.valueOf(topic)).child(uid).child("Speaking_file.3gp");
+                        Uri uri = Uri.fromFile(file);
+                        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                progressDialog.dismiss();
+                                file.delete();
+                                btnPlay.setEnabled(false);
+                                btnDelete.setEnabled(false);
+                                btnUpload.setEnabled(false);
+                                txtRecordLabel.setText("Uploading Finished.");
+                            }
+                        });
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+                builder.create().show();
+            }
+        }
 }
