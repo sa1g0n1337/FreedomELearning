@@ -18,17 +18,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicMarkableReference;
 
 import freedom.com.freedom_e_learning.R;
 
@@ -173,6 +170,11 @@ public class SpeakingFragment1 extends Fragment {
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    btnRecord.setText("start record");
+                    txtRecordLabel.setText("Tab button for record ...");
+                    btnPlay.setEnabled(true);
+                    btnDelete.setEnabled(true);
+                    btnUpload.setEnabled(true);
                     return;
                 }
             });
@@ -204,6 +206,16 @@ public class SpeakingFragment1 extends Fragment {
             audioPlayer.setDataSource(outputFile);
             audioPlayer.prepare();
             audioPlayer.start();
+            audioPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    btnPlay.setText("play record");
+                    btnRecord.setEnabled(true);
+                    btnUpload.setEnabled(true);
+                    btnDelete.setEnabled(true);
+                    stopAudio();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -240,83 +252,54 @@ public class SpeakingFragment1 extends Fragment {
         }
     }
 
-    private boolean checkFirebaseFileExists(){
-        final boolean[] check = new boolean[1];
-        final StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Speaking").child("Topic " + String.valueOf(topic)).child(uid).child("Speaking_file.3gp");
-        storageReference.getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        check[0] = true;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        int errorCode = ((StorageException) e).getErrorCode();
-                        if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND){
-                            check[0] = false;
-                        }
-                    }
-                });
-        return check[0];
-    }
 
     private void uploadAudio() {
         file = new File(outputFile);
-        if (file.exists()) {
-//            if(checkFirebaseFileExists()){
-//                // Create a storage reference from our app
-//                StorageReference storageRef = storage.getReference();
-//
-//                // Create a reference to the file to delete
-//                StorageReference desertRef = storageRef.child("images/desert.jpg");
-//
-//                // Delete the file
-//                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        // File deleted successfully
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception exception) {
-//                        // Uh-oh, an error occurred!
-//                    }
-//                });
-            }
-            else{
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Alert!!!");
-                builder.setMessage("Do you want to delete recording file?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Alert!!!");
+        builder.setMessage("Do you want to upload recording file?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                progressDialog.setMessage("Uploading Audio ...");
+                progressDialog.show();
+                file = new File(outputFile);
+                StorageReference filePath = storageReference.child("Speaking").child("Topic " + String.valueOf(topic)).child(uid).child("Speaking_file.3gp");
+                Uri uri = Uri.fromFile(file);
+                filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        progressDialog.setMessage("Uploading Audio ...");
-                        progressDialog.show();
-                        file = new File(outputFile);
-                        StorageReference filePath = storageReference.child("Speaking").child("Topic " + String.valueOf(topic)).child(uid).child("Speaking_file.3gp");
-                        Uri uri = Uri.fromFile(file);
-                        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                progressDialog.dismiss();
-                                file.delete();
-                                btnPlay.setEnabled(false);
-                                btnDelete.setEnabled(false);
-                                btnUpload.setEnabled(false);
-                                txtRecordLabel.setText("Uploading Finished.");
-                            }
-                        });
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        file.delete();
+                        btnPlay.setEnabled(false);
+                        btnDelete.setEnabled(false);
+                        btnUpload.setEnabled(false);
+                        txtRecordLabel.setText("Uploading Finished.");
                     }
                 });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        return;
-                    }
-                });
-                builder.create().show();
             }
-        }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        });
+        builder.create().show();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
