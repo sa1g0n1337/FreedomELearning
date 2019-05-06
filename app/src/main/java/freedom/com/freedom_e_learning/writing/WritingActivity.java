@@ -1,5 +1,6 @@
 package freedom.com.freedom_e_learning.writing;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -21,6 +22,7 @@ public class WritingActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private Writing writing;
+    private String userId;
 
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference writingReference;
@@ -40,25 +42,28 @@ public class WritingActivity extends AppCompatActivity {
 
     public void getDataFromFirebase() {
 
-        String topic = (String) getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
-        writingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(topic).child(Constants.WRITTING_NODE);
+        Intent userIdIntent = getIntent();
+        if (userIdIntent.hasExtra(Constants.USER_ID)) {
+            userId = userIdIntent.getStringExtra(Constants.USER_ID);
+        }
+        final int topic = (int) getIntent().getIntExtra("TOPIC", 0);
+        writingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(topic + "").child(Constants.WRITTING_NODE);
         writingReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                // Nhận data từ node reading lưu vào model reading
+                // Nhận data từ node speaking lưu vào model speaking
                 writing = dataSnapshot.getValue(Writing.class);
-
                 // Set mấy cái tab trong listening nè
                 TabLayout tabLayout = (TabLayout) findViewById(R.id.writing_tab_layout);
                 tabLayout.addTab(tabLayout.newTab().setText(""));
                 tabLayout.addTab(tabLayout.newTab().setText(""));
-                tabLayout.getTabAt(0).setIcon(R.drawable.ic_description_24dp);
-                tabLayout.getTabAt(1).setIcon(R.drawable.ic_adjust_24dp);
+
+                tabLayout.getTabAt(0).setIcon(R.drawable.ic_mic_24dp);
+                tabLayout.getTabAt(1).setIcon(R.drawable.ic_comment_24dp);
 
                 // Set fragment nè
                 final ViewPager viewPager = findViewById(R.id.writing_pager);
-                WritingFragmentAdapter adapter = new WritingFragmentAdapter(getSupportFragmentManager(), writing);
+                WritingFragmentAdapter adapter = new WritingFragmentAdapter(getSupportFragmentManager(), writing, userId, topic);
                 viewPager.setAdapter(adapter);
                 viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
                 tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

@@ -1,6 +1,5 @@
 package freedom.com.freedom_e_learning.topic;
 
-import freedom.com.freedom_e_learning.Constants;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -87,16 +86,19 @@ public class TopicRecyclerViewAdapter extends RecyclerView.Adapter<TopicRecycler
                                 case 0:
                                     Intent intentListening = new Intent(context, ListeningActivity.class);
                                     intentListening.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
+                                    intentListening.putExtra(Constants.USER_ID, userId);
                                     context.startActivity(intentListening);
                                     break;
                                 case 1:
                                     Intent intentReading = new Intent(context, ReadingActivity.class);
                                     intentReading.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
+                                    intentReading.putExtra(Constants.USER_ID, userId);
                                     context.startActivity(intentReading);
                                     break;
                                 case 2:
                                     Intent intentWriting = new Intent(context, WritingActivity.class);
-                                    intentWriting.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
+                                    intentWriting.putExtra("TOPIC", topic.getId());
+                                    intentWriting.putExtra(Constants.USER_ID, userId);
                                     context.startActivity(intentWriting);
                                     break;
                                 case 3:

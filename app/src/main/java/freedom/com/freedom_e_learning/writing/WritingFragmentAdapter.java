@@ -10,12 +10,14 @@ import freedom.com.freedom_e_learning.model.writing.Writing;
 public class WritingFragmentAdapter extends FragmentPagerAdapter {
     public final static int FRAGMENT_COUNT = 2;
     private Writing writing;
-//    private String mUserID = "";
+    private String userId = "";
+    private int topic = 0;
 
-    public WritingFragmentAdapter(FragmentManager fragmentManager, Writing writing) {
+    public WritingFragmentAdapter(FragmentManager fragmentManager, Writing writing, String userID, int topic) {
         super(fragmentManager);
         this.writing = writing;
-//        this.mUserID = userID;
+        this.userId = userID;
+        this.topic = topic;
     }
 
     @Override
@@ -25,7 +27,9 @@ public class WritingFragmentAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 WritingFragment1 tab1 = new WritingFragment1();
-                bundle.putString("Reading_article", writing.getQuestion());
+                bundle.putString("WRITING_QUESTION", writing.getQuestion());
+                bundle.putString("User ID", userId);
+                bundle.putInt("TOPIC", topic);
                 tab1.setArguments(bundle);
                 return tab1;
             case 1:

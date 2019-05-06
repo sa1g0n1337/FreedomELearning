@@ -122,9 +122,9 @@ public class SetupTopicActivity extends AppCompatActivity {
                 speaking.setTopic(topic.getId());
                 speaking.setQuestion(speakingQuestion.getText().toString());
 
-                writing.setTopic(topic.getId());
+//                writing.setTopic(topic.getId());
                 writing.setQuestion(writingQuestion.getText().toString());
-                writing.setAnswer(writingAns.getText().toString());
+//                writing.setAnswer(writingAns.getText().toString());
 
                 reading.setTopic(topic.getId());
                 reading.setArticle(readingArticle.getText().toString());
