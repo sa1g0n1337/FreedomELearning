@@ -47,7 +47,7 @@ public class WritingActivity extends AppCompatActivity {
             userId = userIdIntent.getStringExtra(Constants.USER_ID);
         }
         final int topic = (int) getIntent().getIntExtra("TOPIC", 0);
-        writingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(topic + "").child(Constants.WRITTING_NODE);
+        writingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(topic + "").child(Constants.WRITING_NODE);
         writingReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -58,7 +58,7 @@ public class WritingActivity extends AppCompatActivity {
                 tabLayout.addTab(tabLayout.newTab().setText(""));
                 tabLayout.addTab(tabLayout.newTab().setText(""));
 
-                tabLayout.getTabAt(0).setIcon(R.drawable.ic_mic_24dp);
+                tabLayout.getTabAt(0).setIcon(R.drawable.ic_edit_24dp);
                 tabLayout.getTabAt(1).setIcon(R.drawable.ic_comment_24dp);
 
                 // Set fragment nè

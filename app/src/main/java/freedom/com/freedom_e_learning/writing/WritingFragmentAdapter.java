@@ -22,18 +22,23 @@ public class WritingFragmentAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Bundle bundle = new Bundle();
+
 
         switch (position) {
             case 0:
                 WritingFragment1 tab1 = new WritingFragment1();
-                bundle.putString("WRITING_QUESTION", writing.getQuestion());
-                bundle.putString("User ID", userId);
-                bundle.putInt("TOPIC", topic);
-                tab1.setArguments(bundle);
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("WRITING_QUESTION", writing.getQuestion());
+                bundle1.putString("User ID", userId);
+                bundle1.putInt("TOPIC", topic);
+                tab1.setArguments(bundle1);
                 return tab1;
             case 1:
                 WritingFragment2 tab2 = new WritingFragment2();
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("User ID", userId);
+                bundle2.putInt("TOPIC", topic);
+                tab2.setArguments(bundle2);
                 return tab2;
 
             default:

@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.TestActivity;
@@ -63,7 +63,7 @@ public class WritingFragment1 extends Fragment {
         // Lấy tạo đường dẫn tới node listening của topic 1, sau này sẽ set id của topic dynamic
         txtWritingQuestion = view.findViewById(R.id.tv_writing_question);
         txtWritingQuestion.setMovementMethod(new ScrollingMovementMethod());
-        txtWritingQuestion.setText(writingQuestion);
+        txtWritingQuestion.setText(String.format("Topic %d: %s", topic, writingQuestion));
 
         uid = getArguments().getString("User ID");
         topic = getArguments().getInt("TOPIC", 0);
@@ -83,15 +83,15 @@ public class WritingFragment1 extends Fragment {
                 writingAnswer.setTopic(topic);
 
                 Teacher teacher1 = new Teacher();
-                teacher1.setName("Tokuda");
+                teacher1.setName("Teacher A");
                 teacher1.setComment("Nice");
 
                 Teacher teacher2 = new Teacher();
-                teacher2.setName("Tram anh");
-                teacher2.setComment("9p HD");
+                teacher2.setName("Teacher B");
+                teacher2.setComment("Hoai dep trai vl!");
 
                 Teacher teacher3 = new Teacher();
-                teacher3.setName("Ricardo");
+                teacher3.setName("Teacher A");
                 teacher3.setComment("Nice!!!!");
 
                 ArrayList<Teacher> list = new ArrayList<>();
@@ -115,16 +115,34 @@ public class WritingFragment1 extends Fragment {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final DatabaseReference writingNode = mData.createDatabase("Writing Answer").child(String.valueOf(answer.getTopic())).child(answer.getUserID());
+                final DatabaseReference writingNode = mData.createDatabase(Constants.WRITING_ANSWER).child(String.valueOf(answer.getTopic())).child(answer.getUserID());
                 writingNode.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() == null) {
                             writingNode.setValue(answer);
-                            Log.d(TAG, "Success");
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                            builder1.setTitle("Your writing");
+                            builder1.setMessage("Saved success!");
+                            builder1.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    return;
+                                }
+                            });
+                            builder1.create().show();
                         } else {
                             writingNode.setValue(answer);
-                            Log.d(TAG, "Update");
+                            AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
+                            builder2.setTitle("Your writing");
+                            builder2.setMessage("Update success!");
+                            builder2.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    return;
+                                }
+                            });
+                            builder2.create().show();
                         }
                     }
 
@@ -145,7 +163,7 @@ public class WritingFragment1 extends Fragment {
     }
 
     private void getAnsFromFirebase(final EditText editText) {
-        final DatabaseReference writingNode = mData.createDatabase("Writing Answer").child(topic + "").child(uid);
+        final DatabaseReference writingNode = mData.createDatabase(Constants.WRITING_ANSWER).child(topic + "").child(uid);
         writingNode.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

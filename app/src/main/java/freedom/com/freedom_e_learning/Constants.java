@@ -7,5 +7,6 @@ public class Constants {
     public static final String LISTENING_NODE = "listening";
     public static final String READING_NODE = "reading";
     public static final String SPEAKING_NODE = "speaking";
-    public static final String WRITTING_NODE = "writing";
+    public static final String WRITING_NODE = "writing";
+    public static final String WRITING_ANSWER = "WRITING ANSWER";
 }
