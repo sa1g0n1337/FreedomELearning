@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +42,11 @@ public class WritingFragment2 extends Fragment {
     private WritingCommentsAdapter writingCommentsAdapter;
     private String userAnswer;
 
+
     private RecyclerView recyclerView;
     private TextView tv_writingContent;
+
+
     private DatabaseReference writingReference;
 
     @Nullable
@@ -64,7 +68,9 @@ public class WritingFragment2 extends Fragment {
 
         uid = getArguments().getString("User ID");
         topic = getArguments().getInt("TOPIC", 0);
-        tv_writingContent = view.findViewById(R.id.writing_content);
+
+
+        tv_writingContent = view.findViewById(R.id.tv_writing_content);
         recyclerView = view.findViewById(R.id.teacher_comments);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -81,6 +87,7 @@ public class WritingFragment2 extends Fragment {
                     userAnswer = writingAnswer.getAnswer();
                     teachers = writingAnswer.getTeacher();
                     tv_writingContent.setText(userAnswer);
+                    tv_writingContent.setMovementMethod(new ScrollingMovementMethod());
                     writingCommentsAdapter = new WritingCommentsAdapter(getContext(), teachers);
                     recyclerView.setAdapter(writingCommentsAdapter);
                 } else {

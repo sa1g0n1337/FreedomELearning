@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
 import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
@@ -63,7 +65,7 @@ public class WritingFragment1 extends Fragment {
         // Lấy tạo đường dẫn tới node listening của topic 1, sau này sẽ set id của topic dynamic
         txtWritingQuestion = view.findViewById(R.id.tv_writing_question);
         txtWritingQuestion.setMovementMethod(new ScrollingMovementMethod());
-        txtWritingQuestion.setText(String.format("Topic %d: %s", topic, writingQuestion));
+
 
         uid = getArguments().getString("User ID");
         topic = getArguments().getInt("TOPIC", 0);
@@ -74,7 +76,7 @@ public class WritingFragment1 extends Fragment {
     }
 
     public void setEvents() {
-
+        txtWritingQuestion.setText(String.format("Topic %d: %s", topic, writingQuestion));
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,13 +93,28 @@ public class WritingFragment1 extends Fragment {
                 teacher2.setComment("Hoai dep trai vl!");
 
                 Teacher teacher3 = new Teacher();
-                teacher3.setName("Teacher A");
+                teacher3.setName("Teacher C");
                 teacher3.setComment("Nice!!!!");
+
+                Teacher teacher4 = new Teacher();
+                teacher4.setName("Teacher D");
+                teacher4.setComment("Con ca vang mau xanh la cay hoi no mau gi?");
+
+                Teacher teacher5 = new Teacher();
+                teacher5.setName("Teacher E");
+                teacher5.setComment("Nulla bibendum mi ac massa auctor viverra. Nullam consectetur nisl a nisl viverra, in pharetra ipsum semper. Ut sed ante ac ex scelerisque ornare. Cras luctus, tellus eu lobortis consequat, nulla ante ultricies diam, ut tincidunt lacus arcu vitae est. Maecenas nec viverra felis. Pellentesque vitae nibh vel orci molestie dapibus a vitae nisl. Mauris nec feugiat augue. Proin elementum nec metus et fermentum. Suspendisse feugiat sit amet lectus vitae aliquam. Etiam in est et arcu sodales tempor. Mauris posuere est ac ipsum accumsan fringilla. Morbi et justo quis elit faucibus pharetra quis a ex. Proin non porta massa. Aliquam vel luctus libero, sit amet condimentum sapien.");
+
+                Teacher teacher6 = new Teacher();
+                teacher6.setName("Teacher F");
+                teacher6.setComment("Etiam quis venenatis orci, vitae blandit ipsum. Sed egestas tortor sodales, placerat tortor sit amet, semper mauris. Maecenas tincidunt risus sed lorem tincidunt varius. In hac habitasse platea dictumst. Nunc est ante, pellentesque eget ultricies sit amet, mattis efficitur velit. Phasellus gravida sed mauris at hendrerit. In auctor lobortis felis, eget aliquam dolor tincidunt at. Vivamus vitae tincidunt ipsum, in placerat sapien. Suspendisse eleifend massa in dui efficitur, sit amet sodales magna congue.!!!!");
 
                 ArrayList<Teacher> list = new ArrayList<>();
                 list.add(teacher1);
                 list.add(teacher2);
                 list.add(teacher3);
+                list.add(teacher4);
+                list.add(teacher5);
+                list.add(teacher6);
 
                 writingAnswer.setTeacher(list);
 
@@ -121,28 +138,10 @@ public class WritingFragment1 extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue() == null) {
                             writingNode.setValue(answer);
-                            AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
-                            builder1.setTitle("Your writing");
-                            builder1.setMessage("Saved success!");
-                            builder1.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    return;
-                                }
-                            });
-                            builder1.create().show();
+                            Toasty.success(getContext(), "Success!", Toast.LENGTH_SHORT, true).show();
                         } else {
                             writingNode.setValue(answer);
-                            AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext());
-                            builder2.setTitle("Your writing");
-                            builder2.setMessage("Update success!");
-                            builder2.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    return;
-                                }
-                            });
-                            builder2.create().show();
+                            Toasty.info(getContext(), "Updated!", Toast.LENGTH_SHORT, true).show();
                         }
                     }
 
