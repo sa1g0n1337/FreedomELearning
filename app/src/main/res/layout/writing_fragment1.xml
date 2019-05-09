@@ -19,28 +19,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_marginTop="0dp"
         android:layout_weight="5"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="10dp"
+        app:contentPadding="10dp">
 
         <EditText
             android:id="@+id/edt_writing_ans"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="false"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="0dp"
             android:background="@null"
             android:gravity="top|left"
             android:hint="Write your answer here..."
             android:inputType="textMultiLine"
-            android:lines="25"
+            android:lines="30"
             android:overScrollMode="always"
-            android:paddingStart="5dp"
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical"
             android:scrollHorizontally="false"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColorHint="#c7c7c7"
             android:textSize="16sp" />
 
@@ -49,19 +45,16 @@
 
     <Button
         android:id="@+id/writing_ans_submit"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="2"
         android:background="@drawable/buttonshape"
-        android:shadowColor="#A8A8A8"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="5"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
         android:text="SUBMIT"
         android:textColor="#FFFFFF"
-        android:textSize="30sp" />
+        android:textSize="20sp" />
 
 
 </LinearLayout>

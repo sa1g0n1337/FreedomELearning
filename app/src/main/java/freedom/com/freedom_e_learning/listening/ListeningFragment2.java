@@ -30,6 +30,6 @@ public class ListeningFragment2 extends Fragment {
         txtTranscript.setMovementMethod(new ScrollingMovementMethod());
         transcript = getArguments().getString("Listening_transcript");
         txtTranscript.setText(transcript);
-        txtTranscript.setTextSize(20);
+        txtTranscript.setMovementMethod(new ScrollingMovementMethod());
     }
 }

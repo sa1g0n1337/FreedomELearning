@@ -32,6 +32,8 @@
             android:layout_below="@id/img_teacher"
             android:layout_marginTop="10dp"
             android:text="Teacher name"
+            android:textColor="#0000FF"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/img_teacher"
             app:layout_constraintStart_toStartOf="@id/img_teacher"
             app:layout_constraintTop_toBottomOf="@id/img_teacher" />
@@ -44,6 +46,7 @@
             android:layout_alignBottom="@id/img_teacher"
             android:layout_marginLeft="16dp"
             android:text="Comment"
+            android:textColor="#2A2A2A"
             app:layout_constraintStart_toEndOf="@id/img_teacher"
             app:layout_constraintTop_toTopOf="@id/img_teacher" />
 

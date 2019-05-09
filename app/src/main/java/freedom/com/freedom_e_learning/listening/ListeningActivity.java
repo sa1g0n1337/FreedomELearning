@@ -25,6 +25,7 @@ public class ListeningActivity extends AppCompatActivity {
     private Listening listening;
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference listeningReference;
+    private String topic;
 
 
     @Override
@@ -33,8 +34,11 @@ public class ListeningActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listening);
 
         // Set up cái thanh toolbar đó
+        topic = getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
+
+
         mToolbar = findViewById(R.id.ListeningToolbar);
-        mToolbar.setTitle("Listening");
+        mToolbar.setTitle(String.format("Topic %s: Listening", topic));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -42,7 +46,6 @@ public class ListeningActivity extends AppCompatActivity {
     }
 
     public void getDataFromFirebase() {
-        String topic = getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
         listeningReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(String.valueOf(topic)).child(Constants.LISTENING_NODE);
         listeningReference.addValueEventListener(new ValueEventListener() {
             @Override

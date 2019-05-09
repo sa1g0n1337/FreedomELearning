@@ -24,15 +24,18 @@ public class ReadingActivity extends AppCompatActivity {
 
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference readingReference;
+    private String topic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reading);
 
+        topic = (String) getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
+
         // Set up cái thanh toolbar đó
         mToolbar = findViewById(R.id.ReadingToolbar);
-        mToolbar.setTitle("Reading");
+        mToolbar.setTitle(String.format("Topic %s: Reading", topic));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getDataFromFirebase();
@@ -40,7 +43,7 @@ public class ReadingActivity extends AppCompatActivity {
 
     public void getDataFromFirebase() {
 
-        String topic = (String) getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
+
         readingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(topic).child(Constants.READING_NODE);
         readingReference.addValueEventListener(new ValueEventListener() {
             @Override

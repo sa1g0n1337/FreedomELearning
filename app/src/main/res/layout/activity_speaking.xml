@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".speaking.SpeakingActivity">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/SpeakingToolbar"
         android:layout_width="match_parent"
@@ -13,11 +15,13 @@
         android:theme="@style/ToolBarTheme.ToolBarStyle"
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@android:color/white" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/SpeakingToolbar">
+
         <android.support.design.widget.TabLayout
             android:id="@+id/speaking_tab_layout"
             android:layout_width="match_parent"
@@ -28,6 +32,7 @@
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/colorAccent"
             app:tabMode="fixed" />
+
         <android.support.v4.view.ViewPager
             android:id="@+id/speaking_pager"
             android:layout_width="match_parent"
@@ -35,4 +40,4 @@
             android:layout_marginTop="-4dp" />
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

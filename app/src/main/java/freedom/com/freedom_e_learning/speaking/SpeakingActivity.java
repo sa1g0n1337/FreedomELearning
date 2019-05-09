@@ -16,7 +16,6 @@ import com.google.firebase.database.ValueEventListener;
 import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
-import freedom.com.freedom_e_learning.model.User;
 import freedom.com.freedom_e_learning.model.speaking.Speaking;
 
 public class SpeakingActivity extends AppCompatActivity {
@@ -26,15 +25,17 @@ public class SpeakingActivity extends AppCompatActivity {
 
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference speakingReference;
+    private String topic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speaking);
 
+        topic = (String) getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
         // Set up cái thanh toolbar đó
         mToolbar = findViewById(R.id.SpeakingToolbar);
-        mToolbar.setTitle("Speaking");
+        mToolbar.setTitle(String.format("Topic %s: Speaking", topic));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getDataFromFirebase();
@@ -45,7 +46,7 @@ public class SpeakingActivity extends AppCompatActivity {
         if (userIdIntent.hasExtra(Constants.USER_ID)) {
             userId = userIdIntent.getStringExtra(Constants.USER_ID);
         }
-        String topic = (String) getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
+
         speakingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(topic).child(Constants.SPEAKING_NODE);
         speakingReference.addValueEventListener(new ValueEventListener() {
             @Override

@@ -14,7 +14,6 @@
         android:id="@+id/topic_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
         android:textAlignment="center">
 
     </android.support.v7.widget.RecyclerView>

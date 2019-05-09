@@ -26,15 +26,18 @@ public class WritingActivity extends AppCompatActivity {
 
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference writingReference;
+    private int topic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
 
+        topic = (int) getIntent().getIntExtra("TOPIC", 0);
+
         // Set up cái thanh toolbar đó
         mToolbar = findViewById(R.id.WritingToolbar);
-        mToolbar.setTitle("Writing");
+        mToolbar.setTitle(String.format("Topic %d: Writing", topic));
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getDataFromFirebase();
@@ -46,7 +49,7 @@ public class WritingActivity extends AppCompatActivity {
         if (userIdIntent.hasExtra(Constants.USER_ID)) {
             userId = userIdIntent.getStringExtra(Constants.USER_ID);
         }
-        final int topic = (int) getIntent().getIntExtra("TOPIC", 0);
+
         writingReference = databaseService.getDatabase().child(Constants.TOPIC_NODE).child(topic + "").child(Constants.WRITING_NODE);
         writingReference.addValueEventListener(new ValueEventListener() {
             @Override
