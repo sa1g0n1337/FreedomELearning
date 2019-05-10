@@ -174,6 +174,7 @@ public class ListeningFragment1 extends Fragment {
     public String miliSecondsToTimer(long miliseconds) {
         String finalTimerString = "";
         String secondsString;
+        String minutesString;
 
         int hours = (int) (miliseconds / (1000 * 60 * 60));
         int minutes = (int) (miliseconds % (1000 * 60 * 60)) / (1000 * 60);
@@ -189,7 +190,13 @@ public class ListeningFragment1 extends Fragment {
             secondsString = "" + seconds;
         }
 
-        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+        if (minutes < 10){
+            minutesString = "0" + minutes;
+        }else {
+            minutesString = "" + minutes;
+        }
+
+        finalTimerString = finalTimerString + minutesString + ":" + secondsString;
 
         return finalTimerString;
     }
