@@ -36,6 +36,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/Time" />
 
+
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
