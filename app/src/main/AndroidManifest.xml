@@ -18,10 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".AboutUsActivity"></activity>
         <activity android:name=".teacher.TeacherWritingDetailActivity"></activity>
         <activity android:name=".teacher.TeacherWritingActivity" />
         <activity android:name=".teacher.TeacherSpeakingActivity" />
         <activity android:name=".teacher.TeacherActivity" />
+
         <activity android:name=".writing.WritingActivity" />
         <activity android:name=".reading.ReadingActivity" />
         <activity android:name=".model.setup.SetupTopicActivity" />

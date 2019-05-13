@@ -168,13 +168,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        if (id == R.id.nav_aboutus) {
+            Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
+            startActivity(intent);
+            finish();
 
         } else if (id == R.id.nav_logout) {
             Log.d(TAG, String.valueOf(databaseService.isSignIn()));
