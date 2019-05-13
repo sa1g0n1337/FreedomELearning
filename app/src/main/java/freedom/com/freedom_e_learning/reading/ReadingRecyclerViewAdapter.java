@@ -3,10 +3,14 @@ package freedom.com.freedom_e_learning.reading;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -55,14 +59,35 @@ public class ReadingRecyclerViewAdapter extends RecyclerView.Adapter<ReadingRecy
         private RadioButton radAnswer0;
         private RadioButton radAnswer1;
         private RadioButton radAnswer2;
+        private RadioGroup radioGroup;
 
 
-        public RecyclerViewHolder(@NonNull View itemView) {
+        public RecyclerViewHolder(@NonNull final View itemView) {
             super(itemView);
             txtQuestion = itemView.findViewById(R.id.readingQuestion);
             radAnswer0 = itemView.findViewById(R.id.radReadingAnswer0);
             radAnswer1 = itemView.findViewById(R.id.radReadingAnswer1);
             radAnswer2 = itemView.findViewById(R.id.radReadingAnswer2);
+            radioGroup = itemView.findViewById(R.id.rad_group);
+            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    switch (checkedId){
+                        case R.id.radReadingAnswer0:
+                            Log.d("Pos",String.valueOf(getAdapterPosition()));
+                            readingQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer0.getText().toString());
+                            break;
+                        case R.id.radReadingAnswer1:
+                            Log.d("Pos",String.valueOf(getAdapterPosition()));
+                            readingQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer1.getText().toString());
+                            break;
+                        case R.id.radReadingAnswer2:
+                            Log.d("Pos",String.valueOf(getAdapterPosition()));
+                            readingQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer2.getText().toString());
+                            break;
+                    }
+                }
+            });
 
 
         }

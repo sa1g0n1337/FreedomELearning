@@ -1,29 +1,38 @@
 package freedom.com.freedom_e_learning.listening;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.model.listening.ListeningQuestion;
 
 
 public class ListeningFragment1 extends Fragment {
-
 
     private ImageView btnPlay;
     private MediaPlayer mediaPlayer;
@@ -32,11 +41,13 @@ public class ListeningFragment1 extends Fragment {
     private Runnable runnable;
     private Handler handler;
     private TextView time;
+    private Button btnSubmit;
 
     private String audioUrl;
     private int save;
 
     ArrayList<ListeningQuestion> listeningQuestions;
+    ArrayList<Integer> WrongAnswer;
 
     private RecyclerView recyclerView;
     private ListeningRecyclerViewAdapter listeningRecyclerViewAdapter;
@@ -61,6 +72,8 @@ public class ListeningFragment1 extends Fragment {
         btnPlay = view.findViewById(R.id.btnPlay);
         seekBar = view.findViewById(R.id.seekBar);
         time = view.findViewById(R.id.Time);
+        btnSubmit = view.findViewById(R.id.btn_submit);
+
         handler = new Handler();
 
 
@@ -74,13 +87,54 @@ public class ListeningFragment1 extends Fragment {
         // Tạo adaper cho recyclerview cho mấy câu trắc nghiệm của listening
         listeningRecyclerViewAdapter = new ListeningRecyclerViewAdapter(getContext(), listeningQuestions);
         recyclerView.setAdapter(listeningRecyclerViewAdapter);
+
     }
 
     public void getListeningData() {
         listeningQuestions = (ArrayList<ListeningQuestion>) getArguments().getSerializable("Listening_questions");
         audioUrl = getArguments().getString(getString(R.string.LISTENING_AUDIO));
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String result = "";
+                int count;
+                for (int j = 0;j<listeningQuestions.size();j++){
+                    if (listeningQuestions.get(j).getChoseAnswer() == null){
+                        Toast.makeText(getActivity(),"Bạn chưa trả lời hết các câu hỏi",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                for(int i =0; i<listeningQuestions.size();i++){
+                    if (Check(listeningQuestions.get(i).getChoseAnswer(),listeningQuestions.get(i).getCorrectAnswer())==1){
+                        result += "Câu " + String.valueOf(i+1) + ": Đúng\n";
+                    }
+                    else{
+                        result += "Câu " + String.valueOf(i+1) + ": Sai\n";
+                    }
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(result);
+                builder.setTitle("Kết quả bài test !!");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getActivity().finish();
+                    }
+                });
+                builder.create().show();
+            }
+        });
+
     }
 
+    public int Check(String s1,String s2){
+        if (s1.matches(s2)){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
 
     private void Audiobar() {
         mediaPlayer = MediaPlayer.create(this.getContext(), R.raw.dancin);

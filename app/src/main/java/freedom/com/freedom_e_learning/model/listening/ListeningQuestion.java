@@ -7,9 +7,18 @@ public class ListeningQuestion {
     private String question;
     private ArrayList<String> answers;
     private String correctAnswer;
+    private String ChoseAnswer;
 
     public ListeningQuestion() {
 
+    }
+
+    public String getChoseAnswer() {
+        return ChoseAnswer;
+    }
+
+    public void setChoseAnswer(String choseAnswer) {
+        ChoseAnswer = choseAnswer;
     }
 
     public ListeningQuestion(String question, ArrayList<String> answers, String correctAnswer) {

@@ -3,10 +3,12 @@ package freedom.com.freedom_e_learning.listening;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,9 +18,12 @@ import freedom.com.freedom_e_learning.model.listening.ListeningQuestion;
 
 public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<ListeningRecyclerViewAdapter.RecyclerViewHolder> {
 
-
+    public static ArrayList<String> selectedAnswers;
     Context context;
+    ArrayList<String> ChoseAnswer = new ArrayList<>();
     ArrayList<ListeningQuestion> listeningQuestions;
+    RecyclerViewHolder recyclerViewHolder;
+
 
     public ListeningRecyclerViewAdapter(Context context, ArrayList<ListeningQuestion> listeningQuestions) {
         this.context = context;
@@ -27,10 +32,10 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
 
     @NonNull
     @Override
-    public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
+    public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup,int position) {
         View view;
         view = LayoutInflater.from(context).inflate(R.layout.listening_item_fragment1, viewGroup, false);
-        RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
+        recyclerViewHolder = new RecyclerViewHolder(view);
         return recyclerViewHolder;
     }
 
@@ -50,7 +55,7 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
     }
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
+        private RadioGroup radioGroup;
         private TextView txtQuestion;
         private RadioButton radAnswer0;
         private RadioButton radAnswer1;
@@ -63,8 +68,26 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
             radAnswer0 = itemView.findViewById(R.id.radListeningAnswer0);
             radAnswer1 = itemView.findViewById(R.id.radListeningAnswer1);
             radAnswer2 = itemView.findViewById(R.id.radListeningAnswer2);
-
-
+            radioGroup = itemView.findViewById(R.id.rad_group);
+            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    switch (checkedId){
+                        case R.id.radListeningAnswer0:
+                            Log.d("Pos",String.valueOf(getAdapterPosition()));
+                            listeningQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer0.getText().toString());
+                            break;
+                        case R.id.radListeningAnswer1:
+                            Log.d("Pos",String.valueOf(getAdapterPosition()));
+                            listeningQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer1.getText().toString());
+                            break;
+                        case R.id.radListeningAnswer2:
+                            Log.d("Pos",String.valueOf(getAdapterPosition()));
+                            listeningQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer2.getText().toString());
+                            break;
+                    }
+                }
+            });
         }
     }
 }

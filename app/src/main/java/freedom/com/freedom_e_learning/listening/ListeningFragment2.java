@@ -20,7 +20,6 @@ public class ListeningFragment2 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.listening_fragment2, container, false);
-
         setControl(view);
         return view;
     }
