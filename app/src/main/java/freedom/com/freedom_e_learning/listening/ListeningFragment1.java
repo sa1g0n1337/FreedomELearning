@@ -127,13 +127,13 @@ public class ListeningFragment1 extends Fragment {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                btnPlay.setImageResource(R.drawable.ic_pause_50dp);
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
-                    btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                    btnPlay.setImageResource(R.drawable.ic_play_50dp);
                 } else {
                     mediaPlayer.start();
-                    btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                    btnPlay.setImageResource(R.drawable.ic_pause_50dp);
                     changeseekBar();
                 }
 
