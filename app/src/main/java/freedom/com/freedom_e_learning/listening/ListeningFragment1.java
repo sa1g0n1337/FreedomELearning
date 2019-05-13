@@ -47,7 +47,6 @@ public class ListeningFragment1 extends Fragment {
     private int save;
 
     ArrayList<ListeningQuestion> listeningQuestions;
-    ArrayList<Integer> WrongAnswer;
 
     private RecyclerView recyclerView;
     private ListeningRecyclerViewAdapter listeningRecyclerViewAdapter;
@@ -100,21 +99,22 @@ public class ListeningFragment1 extends Fragment {
                 int count;
                 for (int j = 0;j<listeningQuestions.size();j++){
                     if (listeningQuestions.get(j).getChoseAnswer() == null){
-                        Toast.makeText(getActivity(),"Bạn chưa trả lời hết các câu hỏi",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),"You must answer all the question",Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
                 for(int i =0; i<listeningQuestions.size();i++){
                     if (Check(listeningQuestions.get(i).getChoseAnswer(),listeningQuestions.get(i).getCorrectAnswer())==1){
-                        result += "Câu " + String.valueOf(i+1) + ": Đúng\n";
+                        result += String.valueOf(i+1) + ": Correct\n";
                     }
                     else{
-                        result += "Câu " + String.valueOf(i+1) + ": Sai\n";
+                        result += String.valueOf(i+1) + ": Wrong\n";
+                        result += "Correct answer: " + listeningQuestions.get(i).getCorrectAnswer() + "\n";
                     }
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage(result);
-                builder.setTitle("Kết quả bài test !!");
+                builder.setTitle("Result !!!");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
