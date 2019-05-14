@@ -171,7 +171,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_aboutus) {
             Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
             startActivity(intent);
-            finish();
 
         } else if (id == R.id.nav_logout) {
             Log.d(TAG, String.valueOf(databaseService.isSignIn()));
