@@ -34,6 +34,9 @@ public class SpeakingFragmentAdapter extends FragmentPagerAdapter {
                 return tab1;
             case 1:
                 SpeakingFragment2 tab2 = new SpeakingFragment2();
+                bundle.putInt("Speaking_topic", speaking.getTopic());
+                bundle.putString("User ID", userId);
+                tab2.setArguments(bundle);
                 return tab2;
             default:
                 return null;

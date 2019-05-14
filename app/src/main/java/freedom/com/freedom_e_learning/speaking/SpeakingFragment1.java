@@ -3,11 +3,13 @@ package freedom.com.freedom_e_learning.speaking;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,9 +33,12 @@ import java.util.Date;
 
 import freedom.com.freedom_e_learning.R;
 
+import static freedom.com.freedom_e_learning.R.id.Time_Speaking_1;
+
 public class SpeakingFragment1 extends Fragment {
     private String path;
     private File file;
+    private SeekBar seekBar;
     private ProgressDialog progressDialog;
     private TextView txtSpeakingArticle;
     private Integer topic;
@@ -41,14 +48,18 @@ public class SpeakingFragment1 extends Fragment {
     private String speakingArticle;
     private TextView txtRecordLabel;
     private Button btnRecord;
-    private Button btnPlay;
+    private ImageView btnPlay;
     private Button btnDelete;
     private Button btnUpload;
     private MediaRecorder myAudioRecorder;
     private String outputFile;
     private static final String LOG_TAG = "Record_log";
-    private MediaPlayer audioPlayer;
+    private MediaPlayer mediaPlayer;
     private StorageReference storageReference;
+    private Handler handler;
+    private TextView audioTime;
+    private int save;
+    private Runnable runnable;
 
     @Nullable
     @Override
@@ -68,7 +79,10 @@ public class SpeakingFragment1 extends Fragment {
         txtSpeakingArticle = view.findViewById(R.id.speaking_question);
         txtRecordLabel = view.findViewById(R.id.txtRecord);
         btnRecord = view.findViewById(R.id.btnRecord);
-        btnPlay = view.findViewById(R.id.btnPlay_Record);
+        btnPlay = view.findViewById(R.id.btnPlay_Speaking_1);
+        seekBar = view.findViewById(R.id.seekBar_Speaking_1);
+        audioTime = view.findViewById(R.id.Time_Speaking_1);
+        handler = new Handler();
         btnDelete = view.findViewById(R.id.btnDelete_Record);
         btnUpload = view.findViewById(R.id.btnUpload_Record);
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -102,33 +116,17 @@ public class SpeakingFragment1 extends Fragment {
                     btnPlay.setEnabled(true);
                     btnDelete.setEnabled(true);
                     btnUpload.setEnabled(true);
+                    Audiobar(outputFile);
+                    AudioPlay();
                 }
             }
         });
-
-        btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (btnPlay.getText().toString().equals("play record")) {
-                    btnPlay.setText("stop record");
-                    btnRecord.setEnabled(false);
-                    btnUpload.setEnabled(false);
-                    btnDelete.setEnabled(false);
-                    playAudio();
-                } else if (btnPlay.getText().toString().equals("stop record")) {
-                    btnPlay.setText("play record");
-                    btnRecord.setEnabled(true);
-                    btnUpload.setEnabled(true);
-                    btnDelete.setEnabled(true);
-                    stopAudio();
-                }
-            }
-        });
-
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteFile();
+                mediaPlayer.release();
+                mediaPlayer = null;
             }
         });
 
@@ -198,33 +196,112 @@ public class SpeakingFragment1 extends Fragment {
         myAudioRecorder.stop();
         myAudioRecorder.release();
         myAudioRecorder = null;
+        mediaPlayer = new MediaPlayer();
     }
 
-    private void playAudio() {
+    private void Audiobar(String path){
         try {
-            audioPlayer = new MediaPlayer();
-            audioPlayer.setDataSource(outputFile);
-            audioPlayer.prepare();
-            audioPlayer.start();
-            audioPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            mediaPlayer.setDataSource(path);
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
-                public void onCompletion(MediaPlayer mp) {
-                    btnPlay.setText("play record");
-                    btnRecord.setEnabled(true);
-                    btnUpload.setEnabled(true);
-                    btnDelete.setEnabled(true);
-                    stopAudio();
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    seekBar.setMax(mediaPlayer.getDuration());
+                    changeseekBar();
                 }
             });
-        } catch (IOException e) {
+            mediaPlayer.prepare();
+            final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
+            audioTime.setText("0:0/" + totalTimer);
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
 
-    private void stopAudio() {
-        audioPlayer.stop();
-        audioPlayer.release();
-        audioPlayer = null;
+    private void AudioPlay(){
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if (b) {
+                    mediaPlayer.seekTo(i);
+                }
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                changeseekBar();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                changeseekBar();
+            }
+        });
+
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                    btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                    btnRecord.setEnabled(true);
+                    btnUpload.setEnabled(true);
+                    btnDelete.setEnabled(true);
+                } else {
+                    mediaPlayer.start();
+                    btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                    changeseekBar();
+                    btnRecord.setEnabled(false);
+                    btnUpload.setEnabled(false);
+                    btnDelete.setEnabled(false);
+                }
+            }
+        });
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                btnRecord.setEnabled(true);
+                btnUpload.setEnabled(true);
+                btnDelete.setEnabled(true);
+                btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                seekBar.setMax(0);
+                changeseekBar();
+            }
+        });
+    }
+
+    private void changeseekBar() {
+        save = mediaPlayer.getCurrentPosition();
+        seekBar.setProgress(save);
+        final String currentTimer = miliSecondsToTimer(mediaPlayer.getCurrentPosition());
+        final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
+        if (mediaPlayer.isPlaying()) {
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    changeseekBar();
+                    audioTime.setText(currentTimer + "/" + totalTimer);
+                }
+            };
+            handler.postDelayed(runnable, 0);
+        }
+    }
+
+    public String miliSecondsToTimer(long miliseconds) {
+        String finalTimerString = "";
+        String secondsString;
+
+        int hours = (int) (miliseconds / (1000 * 60 * 60));
+        int minutes = (int) (miliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((miliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+
+        if (hours > 0) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        return finalTimerString;
     }
 
     private void deleteFile() {

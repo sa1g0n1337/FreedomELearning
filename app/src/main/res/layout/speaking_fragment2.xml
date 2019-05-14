@@ -5,7 +5,32 @@
     android:layout_gravity="center"
     android:gravity="center_horizontal"
     android:orientation="vertical">
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/btnPlay_Speaking_2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:src="@drawable/ic_play_circle_outline_24dp" />
+        <TextView
+            android:id="@+id/Time_Speaking_2"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/btnPlay_Speaking_2"
+            android:gravity="center"
+            android:text="00:00/00:00"
+            android:textAlignment="center" />
+        <SeekBar
+            android:id="@+id/seekBar_Speaking_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/Time_Speaking_2" />
+    </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/speaking_comment_recycler"
         android:layout_width="match_parent"
