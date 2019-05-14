@@ -98,6 +98,7 @@ public class SpeakingFragment1 extends Fragment {
         btnPlay.setEnabled(false);
         btnDelete.setEnabled(false);
         btnUpload.setEnabled(false);
+        seekBar.setEnabled(false);
 
         btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +119,7 @@ public class SpeakingFragment1 extends Fragment {
                     btnUpload.setEnabled(true);
                     Audiobar(outputFile);
                     AudioPlay();
+                    seekBar.setEnabled(true);
                 }
             }
         });
@@ -125,6 +127,9 @@ public class SpeakingFragment1 extends Fragment {
             @Override
             public void onClick(View v) {
                 deleteFile();
+                seekBar.setMax(0);
+                audioTime.setText("0:0/0:0");
+                seekBar.setEnabled(false);
                 mediaPlayer.release();
                 mediaPlayer = null;
             }
@@ -223,11 +228,11 @@ public class SpeakingFragment1 extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if (b) {
                     mediaPlayer.seekTo(i);
+                    changeseekBar();
                 }
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                changeseekBar();
             }
 
             @Override
@@ -265,6 +270,9 @@ public class SpeakingFragment1 extends Fragment {
                 btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
                 seekBar.setMax(0);
                 changeseekBar();
+                final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
+                audioTime.setText("0:0/" + totalTimer);
+                seekBar.setMax(mediaPlayer.getDuration());
             }
         });
     }
@@ -284,6 +292,10 @@ public class SpeakingFragment1 extends Fragment {
             };
             handler.postDelayed(runnable, 0);
         }
+        // TODO: change time when audio pause
+//        else{
+//
+//        }
     }
 
     public String miliSecondsToTimer(long miliseconds) {

@@ -76,7 +76,7 @@ public class SpeakingFragment2 extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("TAG", e.getMessage());
+                        seekBar.setEnabled(false);
                     }
                 });
     }
@@ -112,7 +112,7 @@ public class SpeakingFragment2 extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+//                changeseekBar();
             }
         });
 
@@ -137,6 +137,9 @@ public class SpeakingFragment2 extends Fragment {
                 btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
                 seekBar.setMax(0);
                 changeseekBar();
+                final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
+                time.setText("0:0/" + totalTimer);
+                seekBar.setMax(mediaPlayer.getDuration());
             }
         });
     }
@@ -156,6 +159,11 @@ public class SpeakingFragment2 extends Fragment {
             };
             handler.postDelayed(runnable, 0);
         }
+        // TODO: change time when audio pause
+//        else{
+//
+//        }
+
     }
 
     public String miliSecondsToTimer(long miliseconds) {
