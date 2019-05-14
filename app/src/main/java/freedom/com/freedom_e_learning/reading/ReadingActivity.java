@@ -51,7 +51,7 @@ public class ReadingActivity extends AppCompatActivity {
 
                 // Nhận data từ node reading lưu vào model reading
                 reading = dataSnapshot.getValue(Reading.class);
-
+                reading.setTopicId(topic);
                 // Set mấy cái tab trong listening nè
                 TabLayout tabLayout = (TabLayout) findViewById(R.id.reading_tab_layout);
                 tabLayout.addTab(tabLayout.newTab().setText(""));

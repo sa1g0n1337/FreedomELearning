@@ -37,6 +37,7 @@ public class ListeningActivity extends AppCompatActivity {
         topic = getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
 
 
+
         mToolbar = findViewById(R.id.ListeningToolbar);
         mToolbar.setTitle(String.format("Topic %s: Listening", topic));
         setSupportActionBar(mToolbar);
@@ -53,6 +54,7 @@ public class ListeningActivity extends AppCompatActivity {
 
                 // Nhận data từ node listening lưu vào model listening
                 listening = dataSnapshot.getValue(Listening.class);
+                listening.setTopicId(topic);
 
                 // Set mấy cái tab trong listening nè
                 TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);

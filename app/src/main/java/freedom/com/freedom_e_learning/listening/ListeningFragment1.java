@@ -1,6 +1,9 @@
 package freedom.com.freedom_e_learning.listening;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -10,19 +13,30 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import freedom.com.freedom_e_learning.Constants;
+import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.MainActivity;
 import freedom.com.freedom_e_learning.R;
+import freedom.com.freedom_e_learning.model.Teacher;
+import freedom.com.freedom_e_learning.model.User;
 import freedom.com.freedom_e_learning.model.listening.ListeningQuestion;
+import freedom.com.freedom_e_learning.model.topic.Topic;
+import freedom.com.freedom_e_learning.teacher.TeacherActivity;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -37,11 +51,16 @@ public class ListeningFragment1 extends Fragment {
     private Runnable runnable;
     private Handler handler;
     private TextView time;
+    private Button btnSubmit;
+
+    private DatabaseService databaseService = DatabaseService.getInstance();
 
     private String audioUrl;
     private int save;
+    private double percent;
 
     ArrayList<ListeningQuestion> listeningQuestions;
+    private String TopicID;
 
     private RecyclerView recyclerView;
     private ListeningRecyclerViewAdapter listeningRecyclerViewAdapter;
@@ -54,6 +73,7 @@ public class ListeningFragment1 extends Fragment {
         setControl(view);
         setEvents();
         Audiobar();
+        quizTest();
         return view;
 
     }
@@ -67,6 +87,7 @@ public class ListeningFragment1 extends Fragment {
         seekBar = view.findViewById(R.id.seekBar);
         time = view.findViewById(R.id.Time);
         handler = new Handler();
+        btnSubmit = view.findViewById(R.id.btnListenSubmit);
 
         recyclerView = view.findViewById(R.id.listening_fragment1_recycler);
 
@@ -84,11 +105,65 @@ public class ListeningFragment1 extends Fragment {
 
     public void getListeningData() {
         listeningQuestions = (ArrayList<ListeningQuestion>) getArguments().getSerializable("Listening_questions");
+        TopicID = (String) getArguments().getSerializable("Topic");
         audioUrl = getArguments().getString(getString(R.string.LISTENING_AUDIO));
+
     }
 
+    public void quizTest() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String result = "";
+                int totalCorrectAnswer = 0;
+                for (int i = 0; i < listeningQuestions.size(); i++) {
+                    if (listeningQuestions.get(i).getChoseAnswer() == null) {
+                        Toast.makeText(getActivity(), "You must answer all the question", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else {
+                        int compareResult;
+                        compareResult = checkAnswer(listeningQuestions.get(i).getChoseAnswer(), listeningQuestions.get(i).getCorrectAnswer());
+                        if (compareResult == 1) {
+                            result += "Question" + String.valueOf(i + 1) + ": Correct\n";
+                            totalCorrectAnswer += 1;
+                        } else {
+                            result += "Question" + String.valueOf(i + 1) + ": Wrong\n";
+                            result += "Correct answer: " + listeningQuestions.get(i).getCorrectAnswer() + "\n";
+                        }
+                    }
+                }
+                Log.d("Total ", String.valueOf(totalCorrectAnswer));
+                percent = Float.parseFloat(String.valueOf(totalCorrectAnswer)) / Float.parseFloat(String.valueOf(listeningQuestions.size()));
+                percent = percent * 100;
+                Log.d("percent ", String.valueOf(percent));
+                result += "Correct Rate: " + String.format("%.2f",percent) + "\n";
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Result !!");
+                builder.setMessage(result);
+                builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String UID = databaseService.getFirebaseAuth().getUid();
+                        UID += ":" + String.format("%.2f",percent);
+                        Log.d("Final ",UID);
+                        String topicid = "Topic " + TopicID;
+                        FirebaseDatabase.getInstance().getReference().child("Listening Answer").child(topicid).child("uid:percent").setValue(UID);
+                    }
+                });
+                builder.create().show();
+            }
+        });
+    }
 
-    private void Audiobar(){
+    public int checkAnswer(String s1, String s2) {
+        if (s1.matches(s2)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    private void Audiobar() {
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mediaPlayer.setDataSource(audioUrl);
@@ -100,7 +175,7 @@ public class ListeningFragment1 extends Fragment {
                 }
             });
             mediaPlayer.prepare();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -113,6 +188,7 @@ public class ListeningFragment1 extends Fragment {
                     //changeseekBar();
                 }
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
@@ -182,17 +258,17 @@ public class ListeningFragment1 extends Fragment {
 
         if (hours > 0 && seconds < 10) {
             secondsString = "0" + seconds;
-        }else if (hours > 0 && seconds >10){
+        } else if (hours > 0 && seconds > 10) {
             secondsString = "" + seconds;
-        }else if (seconds < 10){
+        } else if (seconds < 10) {
             secondsString = "0" + seconds;
-        }else {
+        } else {
             secondsString = "" + seconds;
         }
 
-        if (minutes < 10){
+        if (minutes < 10) {
             minutesString = "0" + minutes;
-        }else {
+        } else {
             minutesString = "" + minutes;
         }
 

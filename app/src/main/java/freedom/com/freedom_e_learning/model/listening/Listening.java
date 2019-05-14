@@ -6,6 +6,15 @@ public class Listening {
     private String audioURL;
     private String transcript;
     private ArrayList<ListeningQuestion> questions;
+    private String TopicId;
+
+    public String getTopicId() {
+        return TopicId;
+    }
+
+    public void setTopicId(String topicId) {
+        TopicId = topicId;
+    }
 
     public Listening() {
     }

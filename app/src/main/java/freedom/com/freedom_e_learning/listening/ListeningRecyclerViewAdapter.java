@@ -3,10 +3,12 @@ package freedom.com.freedom_e_learning.listening;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -55,6 +57,7 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
         private RadioButton radAnswer0;
         private RadioButton radAnswer1;
         private RadioButton radAnswer2;
+        private RadioGroup radGroup;
 
 
         public RecyclerViewHolder(@NonNull View itemView) {
@@ -63,6 +66,26 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
             radAnswer0 = itemView.findViewById(R.id.radListeningAnswer0);
             radAnswer1 = itemView.findViewById(R.id.radListeningAnswer1);
             radAnswer2 = itemView.findViewById(R.id.radListeningAnswer2);
+            radGroup = itemView.findViewById(R.id.radGroup);
+            radGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    switch (checkedId){
+                        case R.id.radListeningAnswer0:
+                            Log.d("Pos ", String.valueOf(getAdapterPosition()));
+                            listeningQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer0.getText().toString());
+                            break;
+                        case R.id.radListeningAnswer1:
+                            Log.d("Pos ", String.valueOf(getAdapterPosition()));
+                            listeningQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer1.getText().toString());
+                            break;
+                        case R.id.radListeningAnswer2:
+                            Log.d("Pos ", String.valueOf(getAdapterPosition()));
+                            listeningQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer2.getText().toString());
+                            break;
+                    }
+                }
+            });
 
 
         }

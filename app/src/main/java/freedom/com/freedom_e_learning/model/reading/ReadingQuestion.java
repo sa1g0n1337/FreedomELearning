@@ -7,6 +7,17 @@ public class ReadingQuestion {
     private String question;
     private ArrayList<String> answers;
     private String correctAnswer;
+    private String choseAnswer;
+
+    public String getChoseAnswer() {
+        return choseAnswer;
+    }
+
+    public void setChoseAnswer(String choseAnswer) {
+        this.choseAnswer = choseAnswer;
+    }
+
+
 
     public ReadingQuestion() {
     }

@@ -7,6 +7,16 @@ public class Reading {
     private int topic;
     private String article;
     private ArrayList<ReadingQuestion> questions;
+    private String TopicId;
+
+
+    public String getTopicId() {
+        return TopicId;
+    }
+
+    public void setTopicId(String topicId) {
+        TopicId = topicId;
+    }
 
     public Reading() {
     }
