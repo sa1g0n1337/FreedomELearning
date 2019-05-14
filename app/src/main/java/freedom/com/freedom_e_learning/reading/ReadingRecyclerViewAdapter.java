@@ -40,6 +40,7 @@ public class ReadingRecyclerViewAdapter extends RecyclerView.Adapter<ReadingRecy
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int position) {
         recyclerViewHolder.txtQuestion.setText(readingQuestions.get(position).getQuestion());
+        recyclerViewHolder.txtQuestion.setTextSize(15);
         recyclerViewHolder.radAnswer0.setText(readingQuestions.get(position).getAnswers().get(0));
         recyclerViewHolder.radAnswer1.setText(readingQuestions.get(position).getAnswers().get(1));
         recyclerViewHolder.radAnswer2.setText(readingQuestions.get(position).getAnswers().get(2));

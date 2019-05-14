@@ -5,10 +5,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AboutUsActivity">
-    <TextView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/AboutUsToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints"
-        android:text="hello!"/>
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ToolBarTheme.ToolBarStyle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@android:color/white" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/AboutUs1"
+            android:layout_below="@id/AboutUsToolbar"
+            android:textSize="30dp"
+            android:text="Vũ Tô Thanh Hoài"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            tools:ignore="NotSibling" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/AboutUs2"
+            android:layout_below="@id/AboutUs1"
+            android:textSize="30dp"
+            android:text="Nguyễn Phú Quang"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            tools:ignore="NotSibling" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/AboutUs3"
+            android:layout_below="@id/AboutUs2"
+            android:textSize="30dp"
+            android:text="Nguyễn Quang Huy"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            tools:ignore="NotSibling" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/AboutUs4"
+            android:layout_below="@id/AboutUs3"
+            android:textSize="30dp"
+            android:text="Nguyễn Vũ Việt Huy"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            tools:ignore="NotSibling" />
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

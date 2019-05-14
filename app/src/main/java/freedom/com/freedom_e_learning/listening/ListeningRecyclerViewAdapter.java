@@ -40,6 +40,7 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int position) {
         recyclerViewHolder.txtQuestion.setText(listeningQuestions.get(position).getQuestion());
+        recyclerViewHolder.txtQuestion.setTextSize(15);
         recyclerViewHolder.radAnswer0.setText(listeningQuestions.get(position).getAnswers().get(0));
         recyclerViewHolder.radAnswer1.setText(listeningQuestions.get(position).getAnswers().get(1));
         recyclerViewHolder.radAnswer2.setText(listeningQuestions.get(position).getAnswers().get(2));
