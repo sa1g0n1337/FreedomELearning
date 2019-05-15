@@ -150,6 +150,7 @@ public class ListeningFragment1 extends Fragment {
                 percent = Float.parseFloat(String.valueOf(totalCorrectAnswer)) / Float.parseFloat(String.valueOf(listeningQuestions.size()));
                 percent = percent * 100;
                 Log.d("percent ", String.valueOf(percent));
+                result += "------------------------------------\n";
                 result += "Correct Rate: " + String.format("%.2f",percent) + "\n";
                 MaterialStyledDialog.Builder dialog = new MaterialStyledDialog.Builder(getActivity());
                 dialog.setIcon(R.drawable.icon_success);
