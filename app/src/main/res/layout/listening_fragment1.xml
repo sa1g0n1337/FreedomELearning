@@ -68,7 +68,6 @@
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
         <LinearLayout
-            android:paddingRight="20dp"
             android:paddingBottom="10dp"
             android:gravity="center"
             android:layout_weight="1"
