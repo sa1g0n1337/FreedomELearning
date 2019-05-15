@@ -8,7 +8,10 @@
             android:id="@+id/nav_aboutus"
             android:icon="@drawable/ic_about_us_24dp"
             android:title="About Us" />
-
+        <item
+            android:id="@+id/nav_rating"
+            android:icon="@drawable/ic_chart_24dp"
+            android:title="Rating"/>
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_power_settings_new_black_24dp"
