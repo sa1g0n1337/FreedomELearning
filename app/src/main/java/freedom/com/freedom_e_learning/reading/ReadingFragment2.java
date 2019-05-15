@@ -93,10 +93,10 @@ public class ReadingFragment2 extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String UID = databaseService.getFirebaseAuth().getUid();
-                        UID += ":" + String.format("%.2f",percent);
                         Log.d("Final ",UID);
                         String topicid = "Topic " + TopicID;
-                        FirebaseDatabase.getInstance().getReference().child("Reading Answer").child(topicid).child("uid:percent").setValue(UID);
+                        FirebaseDatabase.getInstance().getReference().child("Reading Answer").child(topicid).child(UID).setValue(String.format("%.2f",percent));
+                        getActivity().finish();
                     }
                 });
                 builder.create().show();

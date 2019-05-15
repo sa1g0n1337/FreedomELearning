@@ -144,10 +144,9 @@ public class ListeningFragment1 extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String UID = databaseService.getFirebaseAuth().getUid();
-                        UID += ":" + String.format("%.2f",percent);
-                        Log.d("Final ",UID);
                         String topicid = "Topic " + TopicID;
-                        FirebaseDatabase.getInstance().getReference().child("Listening Answer").child(topicid).child("uid:percent").setValue(UID);
+                        FirebaseDatabase.getInstance().getReference().child("Listening Answer").child(topicid).child(UID).setValue(String.format("%.2f",percent));
+                        getActivity().finish();
                     }
                 });
                 builder.create().show();
@@ -156,7 +155,7 @@ public class ListeningFragment1 extends Fragment {
     }
 
     public int checkAnswer(String s1, String s2) {
-        if (s1.matches(s2)) {
+        if (s1.equals(s2)) {
             return 1;
         } else {
             return 0;
