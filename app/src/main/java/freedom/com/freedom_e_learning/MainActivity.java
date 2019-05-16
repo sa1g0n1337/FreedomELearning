@@ -175,6 +175,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_rating){
             item.setChecked(false);
+            Intent intent = new Intent(MainActivity.this, ChartActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_logout) {
             Log.d(TAG, String.valueOf(databaseService.isSignIn()));
