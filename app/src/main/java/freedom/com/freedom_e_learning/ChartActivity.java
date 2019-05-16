@@ -1,15 +1,17 @@
 package freedom.com.freedom_e_learning;
 
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+
 
 import java.util.ArrayList;
 
@@ -22,6 +24,7 @@ public class ChartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
         setControl();
+        chartdata();
     }
 
     private void setControl() {
@@ -34,38 +37,57 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     private void chartdata(){
-        ArrayList NoOfEmp = new ArrayList();
 
-        NoOfEmp.add(new BarEntry(945f, 0));
-        NoOfEmp.add(new BarEntry(1040f, 1));
-        NoOfEmp.add(new BarEntry(1133f, 2));
-        NoOfEmp.add(new BarEntry(1240f, 3));
-        NoOfEmp.add(new BarEntry(1369f, 4));
-        NoOfEmp.add(new BarEntry(1487f, 5));
-        NoOfEmp.add(new BarEntry(1501f, 6));
-        NoOfEmp.add(new BarEntry(1645f, 7));
-        NoOfEmp.add(new BarEntry(1578f, 8));
-        NoOfEmp.add(new BarEntry(1695f, 9));
+        BarDataSet barListening = new BarDataSet(listeningentries(),"Listening");
+        barListening.setColor(Color.RED);
 
-        ArrayList year = new ArrayList();
+        BarDataSet barReading = new BarDataSet(readingentries(),"Reading");
+        barReading.setColor(Color.BLUE);
 
-        year.add("2008");
-        year.add("2009");
-        year.add("2010");
-        year.add("2011");
-        year.add("2012");
-        year.add("2013");
-        year.add("2014");
-        year.add("2015");
-        year.add("2016");
-        year.add("2017");
-
-        BarDataSet bardataset = new BarDataSet(NoOfEmp, "No Of Employee");
-        barChart.animateY(5000);
-        BarData data = new BarData((IBarDataSet) year, bardataset);
-        bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        BarData data = new BarData(barListening,barReading);
         barChart.setData(data);
+
+        String[]days = new String[]{"1/5","2/5","3/5","4/5"};
+
+        XAxis xAxis = barChart.getXAxis();
+            xAxis.setValueFormatter(new IndexAxisValueFormatter(days));
+            xAxis.setCenterAxisLabels(true);
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setGranularity(1);
+            xAxis.setGranularityEnabled(true);
+
+        barChart.setDragEnabled(true);
+        barChart.setVisibleXRangeMaximum(3);
+
+        float barSpace =0.1f;
+        float groupSpace = 0.5f;
+        data.setBarWidth(0.15f);
+        barChart.getXAxis().setAxisMinimum(0);
+        barChart.getXAxis().setAxisMaximum(0+barChart.getBarData().getGroupWidth(groupSpace,barSpace)*4);
+        //barChart.getAxisLeft().setAxisMaximum(0);
+        barChart.setDescription(null);
+        barChart.groupBars(0,groupSpace,barSpace);
+        barChart.invalidate();
+
     }
+
+    private ArrayList<BarEntry> listeningentries(){
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(1,30));
+        entries.add(new BarEntry(2,20));
+        entries.add(new BarEntry(3,90));
+        entries.add(new BarEntry(4,80));
+        return entries;
+    }
+    private ArrayList<BarEntry> readingentries(){
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(1,60));
+        entries.add(new BarEntry(2,90));
+        entries.add(new BarEntry(3,30));
+        entries.add(new BarEntry(4,70));
+        return entries;
+    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
