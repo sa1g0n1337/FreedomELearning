@@ -1,6 +1,7 @@
 package freedom.com.freedom_e_learning.listening;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,10 +24,19 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
@@ -52,6 +62,10 @@ public class ListeningFragment1 extends Fragment {
     private Handler handler;
     private TextView time;
     private Button btnSubmit;
+    private String dateSaved;
+    private String topicid;
+    private String UID;
+
 
     private DatabaseService databaseService = DatabaseService.getInstance();
 
@@ -136,32 +150,57 @@ public class ListeningFragment1 extends Fragment {
                 percent = Float.parseFloat(String.valueOf(totalCorrectAnswer)) / Float.parseFloat(String.valueOf(listeningQuestions.size()));
                 percent = percent * 100;
                 Log.d("percent ", String.valueOf(percent));
+                result += "------------------------------------\n";
                 result += "Correct Rate: " + String.format("%.2f",percent) + "\n";
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Result !!");
-                builder.setMessage(result);
-                builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                MaterialStyledDialog.Builder dialog = new MaterialStyledDialog.Builder(getActivity());
+                dialog.setIcon(R.drawable.icon_success);
+                dialog.setDescription(result);
+                dialog.setPositiveText("Submit");
+                dialog.onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String UID = databaseService.getFirebaseAuth().getUid();
-                        UID += ":" + String.format("%.2f",percent);
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        UID = databaseService.getFirebaseAuth().getUid();
                         Log.d("Final ",UID);
-                        String topicid = "Topic " + TopicID;
-                        FirebaseDatabase.getInstance().getReference().child("Listening Answer").child(topicid).child("uid:percent").setValue(UID);
+                        topicid = "Topic " + TopicID;
+                        final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        final Date date = new Date();
+                        Log.d("date ",dateFormat.format(date));
+                        FirebaseDatabase.getInstance().getReference().child("Lisntening Answer").child(topicid).child(UID).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
+                                    return;
+                                }
+                                else{
+                                    if(dataSnapshot.child(dateFormat.format(date)).exists()){
+                                        return;
+                                    }
+                                    else{
+                                        FirebaseDatabase.getInstance().getReference().child("Lisntening Answer").child(topicid).child(UID).child(dateFormat.format(date)).setValue(String.format("%.2f",percent));
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
-                builder.create().show();
+                dialog.build();
+                dialog.show();
             }
         });
     }
 
     public int checkAnswer(String s1, String s2) {
-        if (s1.matches(s2)) {
+        if (s1.equals(s2)) {
             return 1;
         } else {
             return 0;
         }
     }
+
 
     private void Audiobar() {
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);

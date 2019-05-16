@@ -52,6 +52,16 @@ public class ReadingRecyclerViewAdapter extends RecyclerView.Adapter<ReadingRecy
         return readingQuestions.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txtQuestion;

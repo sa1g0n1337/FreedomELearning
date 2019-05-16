@@ -52,6 +52,16 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
         return listeningQuestions.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txtQuestion;
@@ -59,7 +69,6 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
         private RadioButton radAnswer1;
         private RadioButton radAnswer2;
         private RadioGroup radGroup;
-
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
