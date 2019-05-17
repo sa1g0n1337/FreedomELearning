@@ -3,13 +3,13 @@ package freedom.com.freedom_e_learning.speaking;
 import android.app.ProgressDialog;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +17,25 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.IOException;
+import java.util.ArrayList;
+
+import freedom.com.freedom_e_learning.Constants;
+import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
+import freedom.com.freedom_e_learning.model.Teacher;
+import freedom.com.freedom_e_learning.model.speaking.SpeakingAnswer;
 
 public class SpeakingFragment2 extends Fragment {
+    private DatabaseService databaseService = DatabaseService.getInstance();
     private ImageView btnPlay;
     private MediaPlayer mediaPlayer;
+    private ArrayList<Teacher> teachers = new ArrayList<>();
     private ProgressDialog progressDialog;
     private SeekBar seekBar;
     private Runnable runnable;
@@ -36,7 +45,9 @@ public class SpeakingFragment2 extends Fragment {
     private String uid;
     private String audioUrl;
     private int save;
-    private StorageReference storageReference;
+    private DatabaseReference speakingReference;
+    private SpeakingCommentsAdapter speakingCommentsAdapter;
+    private RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -56,29 +67,42 @@ public class SpeakingFragment2 extends Fragment {
         seekBar = view.findViewById(R.id.seekBar_Speaking_2);
         time = view.findViewById(R.id.Time_Speaking_2);
         handler = new Handler();
+        recyclerView = view.findViewById(R.id.speaking_comment_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     public void setEvents() {
+        seekBar.setEnabled(false);
         getSpeakingData();
     }
 
     public void getSpeakingData() {
-        final FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("Speaking").child("Topic " + String.valueOf(topic)).child(uid).child("Speaking_file.3gp");
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        speakingReference = databaseService.getDatabase().child(Constants.SPEAKING_ANSWER).child(topic + "").child(uid);
+
+        speakingReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onSuccess(Uri uri) {
-                audioUrl = uri.toString();
-                Log.d("Url", audioUrl);
-                Audiobar(audioUrl);
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        seekBar.setEnabled(false);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    SpeakingAnswer speakingAnswer = dataSnapshot.getValue(SpeakingAnswer.class);
+                    teachers = speakingAnswer.getTeacher();
+                    if(teachers != null){
+                        speakingCommentsAdapter = new SpeakingCommentsAdapter(getContext(), teachers);
+                        recyclerView.setAdapter(speakingCommentsAdapter);
                     }
-                });
+                    mediaPlayer.release();
+                    mediaPlayer = new MediaPlayer();
+                    audioUrl = speakingAnswer.getUserAudioURL();
+                    if(audioUrl != null){
+                        seekBar.setEnabled(true);
+                        Audiobar(audioUrl);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     private void Audiobar(String url){
@@ -98,6 +122,7 @@ public class SpeakingFragment2 extends Fragment {
         } catch (IOException e){
             e.printStackTrace();
         }
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -112,7 +137,6 @@ public class SpeakingFragment2 extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-//                changeseekBar();
             }
         });
 

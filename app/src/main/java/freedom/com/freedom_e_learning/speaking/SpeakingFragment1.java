@@ -3,9 +3,11 @@ package freedom.com.freedom_e_learning.speaking;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -24,8 +26,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -34,14 +42,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
+import es.dmoral.toasty.Toasty;
+import freedom.com.freedom_e_learning.Constants;
+import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
+import freedom.com.freedom_e_learning.model.speaking.SpeakingAnswer;
 
-import static freedom.com.freedom_e_learning.R.id.Time_Speaking_1;
 
 public class SpeakingFragment1 extends Fragment {
+    private DatabaseService mData = DatabaseService.getInstance();
+
     private String path;
     private File file;
     private SeekBar seekBar;
+    private String audioUrl;
     private ProgressDialog progressDialog;
     private TextView txtSpeakingArticle;
     private Integer topic;
@@ -62,6 +76,8 @@ public class SpeakingFragment1 extends Fragment {
     private TextView audioTime;
     private int save;
     private Runnable runnable;
+    private SpeakingAnswer speakingAnswer;
+
 
     @Nullable
     @Override
@@ -73,6 +89,7 @@ public class SpeakingFragment1 extends Fragment {
     }
 
     public void setControl(View view) {
+        speakingAnswer = new SpeakingAnswer();
         speakingArticle = getArguments().getString("Speaking_article");
         topic = getArguments().getInt("Speaking_topic");
         uid = getArguments().getString("User ID"); //nhận UID
@@ -213,7 +230,7 @@ public class SpeakingFragment1 extends Fragment {
         mediaPlayer = new MediaPlayer();
     }
 
-    private void Audiobar(String path){
+    private void Audiobar(String path) {
         try {
             mediaPlayer.setDataSource(path);
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -226,12 +243,12 @@ public class SpeakingFragment1 extends Fragment {
             mediaPlayer.prepare();
             final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
             audioTime.setText("0:0/" + totalTimer);
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void AudioPlay(){
+    private void AudioPlay() {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -240,6 +257,7 @@ public class SpeakingFragment1 extends Fragment {
                     changeseekBar();
                 }
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
@@ -313,7 +331,7 @@ public class SpeakingFragment1 extends Fragment {
 //        }
     }
 
-    public String miliSecondsToTimer(long miliseconds) {
+    private String miliSecondsToTimer(long miliseconds) {
         String finalTimerString = "";
         String secondsString;
         String minutesString;
@@ -383,7 +401,7 @@ public class SpeakingFragment1 extends Fragment {
                 progressDialog.setMessage("Uploading Audio ...");
                 progressDialog.show();
                 file = new File(outputFile);
-                StorageReference filePath = storageReference.child("Speaking").child("Topic " + String.valueOf(topic)).child(uid).child("Speaking_file.3gp");
+                final StorageReference filePath = storageReference.child("Speaking").child("Topic_" + String.valueOf(topic)).child(uid).child("Speaking_file.3gp");
                 Uri uri = Uri.fromFile(file);
                 filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -394,9 +412,27 @@ public class SpeakingFragment1 extends Fragment {
                         btnDelete.setEnabled(false);
                         btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
                         btnUpload.setEnabled(false);
-                        btnUpload.setBackgroundResource(R.drawable.upload_onsucess);
-                        sucessAnimation[0] = (AnimationDrawable) btnUpload.getBackground();
-                        sucessAnimation[0].start();
+
+                        txtRecordLabel.setText("Uploading Finished.");
+                        filePath.getDownloadUrl()
+                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        audioUrl = uri.toString();
+                                        speakingAnswer.setUserAudioURL(audioUrl);
+                                        audioUrl = null;
+                                        speakingAnswer.setUserID(uid);
+                                        speakingAnswer.setTopic(topic);
+                                        uploadSpeakingAnswer(speakingAnswer);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
+
                     }
                 });
             }
@@ -410,6 +446,28 @@ public class SpeakingFragment1 extends Fragment {
         builder.create().show();
     }
 
+
+
+    private void uploadSpeakingAnswer(final SpeakingAnswer answer) {
+        final DatabaseReference speakingNode = mData.createDatabase(Constants.SPEAKING_ANSWER).child(String.valueOf(answer.getTopic())).child(answer.getUserID());
+        speakingNode.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) {
+                    speakingNode.setValue(answer);
+                    Toasty.success(getContext(), "Success!", Toast.LENGTH_SHORT, true).show();
+                } else {
+                    speakingNode.setValue(answer);
+                    Toasty.info(getContext(), "Updated!", Toast.LENGTH_SHORT, true).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }
 

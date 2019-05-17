@@ -41,15 +41,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tv_topic_title"
-                android:text="Speaking" />
+                android:layout_marginLeft="20dp"
+                android:text="Speaking"
+                android:background="@drawable/buttonshape"/>
 
             <Button
                 android:id="@+id/btn_teacher_writing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/btn_teacher_speaking"
-                android:text="Writing" />
-
+                android:text="Writing"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/buttonshape"/>
 
         </RelativeLayout>
 

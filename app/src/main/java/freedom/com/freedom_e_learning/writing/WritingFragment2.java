@@ -85,8 +85,10 @@ public class WritingFragment2 extends Fragment {
                     teachers = writingAnswer.getTeacher();
                     tv_writingContent.setText(userAnswer);
                     tv_writingContent.setMovementMethod(new ScrollingMovementMethod());
-                    writingCommentsAdapter = new WritingCommentsAdapter(getContext(), teachers);
-                    recyclerView.setAdapter(writingCommentsAdapter);
+                    if(teachers == null){
+                        writingCommentsAdapter = new WritingCommentsAdapter(getContext(), teachers);
+                        recyclerView.setAdapter(writingCommentsAdapter);
+                    }
                 } else {
                     tv_writingContent.setText("No answer yet!");
                 }
