@@ -10,9 +10,9 @@
         <inset
             android:drawable="@drawable/ic_record_24dp"
             android:gravity="center"
-            android:insetTop="60dp"
-            android:insetBottom="60dp"
-            android:insetRight="60dp"
-            android:insetLeft="60dp"/>
+            android:insetTop="10dp"
+            android:insetBottom="10dp"
+            android:insetRight="20dp"
+            android:insetLeft="20dp"/>
     </item>
 </layer-list>
