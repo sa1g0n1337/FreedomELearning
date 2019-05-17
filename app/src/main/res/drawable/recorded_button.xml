@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item >
+        <shape android:shape="oval">
+            <solid android:color="@color/colorRed"/>
+            <size android:width="60dp" android:height="60dp"/>
+        </shape>
+    </item>
+    <item>
+        <inset
+            android:drawable="@drawable/ic_record_24dp"
+            android:gravity="center"
+            android:insetTop="10dp"
+            android:insetBottom="10dp"
+            android:insetRight="20dp"
+            android:insetLeft="20dp"/>
+    </item>
+</layer-list>

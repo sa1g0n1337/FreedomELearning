@@ -143,13 +143,13 @@ public class SpeakingFragment2 extends Fragment {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                btnPlay.setImageResource(R.drawable.ic_pause_50dp);
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
-                    btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                    btnPlay.setImageResource(R.drawable.ic_play_50dp);
                 } else {
                     mediaPlayer.start();
-                    btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                    btnPlay.setImageResource(R.drawable.ic_pause_50dp);
                     changeseekBar();
                 }
 
@@ -158,7 +158,7 @@ public class SpeakingFragment2 extends Fragment {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                btnPlay.setImageResource(R.drawable.ic_play_50dp);
                 seekBar.setMax(0);
                 changeseekBar();
                 final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
@@ -193,17 +193,29 @@ public class SpeakingFragment2 extends Fragment {
     public String miliSecondsToTimer(long miliseconds) {
         String finalTimerString = "";
         String secondsString;
+        String minutesString;
 
         int hours = (int) (miliseconds / (1000 * 60 * 60));
         int minutes = (int) (miliseconds % (1000 * 60 * 60)) / (1000 * 60);
         int seconds = (int) ((miliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
 
-        if (hours > 0) {
+        if (hours > 0 && seconds < 10) {
+            secondsString = "0" + seconds;
+        } else if (hours > 0 && seconds > 10) {
+            secondsString = "" + seconds;
+        } else if (seconds < 10) {
             secondsString = "0" + seconds;
         } else {
             secondsString = "" + seconds;
         }
-        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        if (minutes < 10) {
+            minutesString = "0" + minutes;
+        } else {
+            minutesString = "" + minutes;
+        }
+
+        finalTimerString = finalTimerString + minutesString + ":" + secondsString;
 
         return finalTimerString;
     }

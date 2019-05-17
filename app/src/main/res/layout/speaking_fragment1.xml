@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_weight="1"
-        app:contentPadding="10dp">
+        app:contentPadding="10dp"
+        app:cardCornerRadius="10dp">
 
         <TextView
             android:id="@+id/speaking_question"
@@ -34,10 +35,12 @@
             android:orientation="vertical">
             <Button
                 android:id="@+id/btnRecord"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/record_button"
                 android:layout_margin="10dp"
-                android:text="start record" />
+                android:text="start record"
+                android:textSize="0dp"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,29 +52,32 @@
                     android:layout_height="wrap_content">
                     <ImageView
                         android:id="@+id/btnPlay_Speaking_1"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:clickable="true"
-                        android:src="@drawable/ic_play_circle_outline_24dp" />
+
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_play_50dp" />
 
                     <TextView
                         android:id="@+id/Time_Speaking_1"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="0dp"
+
                         android:layout_toRightOf="@+id/btnPlay_Speaking_1"
                         android:gravity="center"
                         android:text="00:00/00:00"
+                        android:textSize="20dp"
                         android:textAlignment="center" />
                     <SeekBar
                         android:id="@+id/seekBar_Speaking_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/Time_Speaking_1" />
+                        android:layout_toRightOf="@+id/Time_Speaking_1"
+                        android:thumb="@drawable/seekba_custom_thumb"/>
                 </RelativeLayout>
             </LinearLayout>
             <LinearLayout
@@ -85,24 +91,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="delete record" />
+                    android:background="@drawable/delete_disable_button"
+                    android:text="delete record"
+                    android:textSize="0dp"/>
                 <Button
                     android:id="@+id/btnUpload_Record"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="upload record" />
+                    android:background="@drawable/submit_disable_button"
+                    android:text="upload record"
+                    android:textSize="0dp"/>
             </LinearLayout>
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/txtRecord"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="9"
-            android:gravity="center"
-            android:text="Tab button for record ..." />
 
     </LinearLayout>
 </LinearLayout>
