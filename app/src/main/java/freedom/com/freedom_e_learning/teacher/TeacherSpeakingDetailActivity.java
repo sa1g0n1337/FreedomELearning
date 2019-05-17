@@ -1,106 +1,127 @@
-package freedom.com.freedom_e_learning.speaking;
+package freedom.com.freedom_e_learning.teacher;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
+import es.dmoral.toasty.Toasty;
 import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.model.Teacher;
 import freedom.com.freedom_e_learning.model.speaking.SpeakingAnswer;
 
-public class SpeakingFragment2 extends Fragment {
-    private DatabaseService databaseService = DatabaseService.getInstance();
+public class TeacherSpeakingDetailActivity extends AppCompatActivity {
+    String topic, userID, teacherID, teacherName, teacherComment;
     private ImageView btnPlay;
     private MediaPlayer mediaPlayer;
-    private ArrayList<Teacher> teachers = new ArrayList<>();
-    private ProgressDialog progressDialog;
     private SeekBar seekBar;
     private Runnable runnable;
     private Handler handler;
     private TextView time;
-    private int topic;
     private String uid;
     private String audioUrl;
     private int save;
-    private DatabaseReference speakingReference;
-    private SpeakingCommentsAdapter speakingCommentsAdapter;
-    private RecyclerView recyclerView;
-
-    @Nullable
+    private SpeakingAnswer speakingAnswer;
+    private EditText edtTeacherComment;
+    private Button btnSubmit;
+    private DatabaseService databaseService = DatabaseService.getInstance();
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.speaking_fragment2, container, false);
-        setControl(view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_speaking_detail);
+        setControls();
         setEvents();
-        return view;
+        getUserAnswer();
     }
 
-    public void setControl(View view) {
-        topic = getArguments().getInt("Speaking_topic");
-        uid = getArguments().getString("User ID");
+    public class LoadDataTask extends AsyncTask<Void, Void, Void> {
+        private String comment;
+        public String getComment() {
+            return comment;
+        }
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            submitComment(this.comment);
+            return null;
+        }
+    }
+
+    public void setControls() {
         mediaPlayer = new MediaPlayer();
-        progressDialog = new ProgressDialog(getActivity());
-        btnPlay = view.findViewById(R.id.btnPlay_Speaking_2);
-        seekBar = view.findViewById(R.id.seekBar_Speaking_2);
-        time = view.findViewById(R.id.Time_Speaking_2);
+//        progressDialog = new ProgressDialog();
+        btnPlay = findViewById(R.id.btnPlay_Speaking_comment);
+        seekBar = findViewById(R.id.seekBar_Speaking_comment);
+        time = findViewById(R.id.Time_Speaking_comment);
         handler = new Handler();
-        recyclerView = view.findViewById(R.id.speaking_comment_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        edtTeacherComment = findViewById(R.id.edt_teacher_comment_speaking);
+        btnSubmit = findViewById(R.id.teacher_speaking_submit);
+        teacherID = databaseService.getFirebaseAuth().getCurrentUser().getUid();
+
     }
 
     public void setEvents() {
         seekBar.setEnabled(false);
         getSpeakingData();
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                teacherComment = edtTeacherComment.getText().toString();
+                TeacherSpeakingDetailActivity.LoadDataTask loadDataTask = new TeacherSpeakingDetailActivity.LoadDataTask();
+                loadDataTask.setComment(teacherComment);
+                loadDataTask.execute();
+                return;
+            }
+        });
     }
 
     public void getSpeakingData() {
-        speakingReference = databaseService.getDatabase().child(Constants.SPEAKING_ANSWER).child(topic + "").child(uid);
-
-        speakingReference.addValueEventListener(new ValueEventListener() {
+        Intent intent = getIntent();
+        topic = intent.getStringExtra("TOPIC");
+        userID = intent.getStringExtra("USER_ID");
+        final DatabaseReference writingAnsRef = databaseService.getDatabase().child("SPEAKING ANSWER").child(topic).child(userID);
+        writingAnsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    SpeakingAnswer speakingAnswer = dataSnapshot.getValue(SpeakingAnswer.class);
-                    teachers = speakingAnswer.getTeacher();
-                    if(teachers != null){
-                        speakingCommentsAdapter = new SpeakingCommentsAdapter(getContext(), teachers);
-                        recyclerView.setAdapter(speakingCommentsAdapter);
-                    }
-                    mediaPlayer.release();
-                    mediaPlayer = new MediaPlayer();
-                    audioUrl = speakingAnswer.getUserAudioURL();
-                    if(audioUrl != null){
-                        seekBar.setEnabled(true);
-                        Audiobar(audioUrl);
-                    }
-                }
+                seekBar.setEnabled(true);
+                speakingAnswer = dataSnapshot.getValue(SpeakingAnswer.class);
+                Audiobar(speakingAnswer.getUserAudioURL());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
@@ -122,7 +143,6 @@ public class SpeakingFragment2 extends Fragment {
         } catch (IOException e){
             e.printStackTrace();
         }
-
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -137,6 +157,7 @@ public class SpeakingFragment2 extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+//                changeseekBar();
             }
         });
 
@@ -206,5 +227,51 @@ public class SpeakingFragment2 extends Fragment {
         finalTimerString = finalTimerString + minutes + ":" + secondsString;
 
         return finalTimerString;
+    }
+
+    public void getUserAnswer() {
+        Intent intent = getIntent();
+        topic = intent.getStringExtra("TOPIC");
+        userID = intent.getStringExtra("USER_ID");
+    }
+
+    public void submitComment(String comment) {
+        final DatabaseReference teacherRef = databaseService.createDatabase(Constants.SPEAKING_ANSWER).child(topic).child(userID).child("teacher");
+        final Teacher teacher = new Teacher();
+        teacherName = databaseService.getFirebaseAuth().getCurrentUser().getDisplayName();
+        teacher.setName(teacherName);
+        teacher.setComment(comment);
+        teacher.setId(teacherID);
+        teacherRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                int counter = 0;
+                if (dataSnapshot != null) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Teacher temp = ds.getValue(Teacher.class);
+                        if (temp.getId().equals(teacherID)) {
+                            teacherRef.child(ds.getKey()).setValue(teacher);
+                            Toasty.success(TeacherSpeakingDetailActivity.this, "Success!", Toast.LENGTH_SHORT, true).show();
+                            return;
+                        }
+                        counter++;
+                    }
+
+                    teacherRef.child(counter + "").setValue(teacher);
+                } else {
+                    teacherRef.child("0").setValue(teacher);
+                }
+
+
+//                teacherRef.setValue(teacher);
+//
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

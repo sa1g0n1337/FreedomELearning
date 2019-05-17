@@ -22,13 +22,14 @@
         <activity android:name=".teacher.TeacherWritingDetailActivity"></activity>
         <activity android:name=".teacher.TeacherWritingActivity" />
         <activity android:name=".teacher.TeacherSpeakingActivity" />
+        <activity android:name=".listening.ListeningActivity"/>
+        <activity android:name=".teacher.TeacherSpeakingDetailActivity"/>
         <activity android:name=".teacher.TeacherActivity" />
 
         <activity android:name=".writing.WritingActivity" />
         <activity android:name=".reading.ReadingActivity" />
         <activity android:name=".model.setup.SetupTopicActivity" />
         <activity android:name=".TestActivity" />
-        <activity android:name=".listening.ListeningActivity" />
         <activity android:name=".speaking.SpeakingActivity" />
         <activity
             android:name=".MainActivity"
