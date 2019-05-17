@@ -244,16 +244,16 @@ public class SpeakingFragment1 extends Fragment {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                btnPlay.setImageResource(R.drawable.ic_pause_50dp);
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
-                    btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                    btnPlay.setImageResource(R.drawable.ic_play_50dp);
                     btnRecord.setEnabled(true);
                     btnUpload.setEnabled(true);
                     btnDelete.setEnabled(true);
                 } else {
                     mediaPlayer.start();
-                    btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                    btnPlay.setImageResource(R.drawable.ic_pause_50dp);
                     changeseekBar();
                     btnRecord.setEnabled(false);
                     btnUpload.setEnabled(false);
@@ -267,7 +267,7 @@ public class SpeakingFragment1 extends Fragment {
                 btnRecord.setEnabled(true);
                 btnUpload.setEnabled(true);
                 btnDelete.setEnabled(true);
-                btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                btnPlay.setImageResource(R.drawable.ic_play_50dp);
                 seekBar.setMax(0);
                 changeseekBar();
                 final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());

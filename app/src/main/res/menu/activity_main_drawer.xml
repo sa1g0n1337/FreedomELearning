@@ -3,20 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_aboutus"
-            android:icon="@drawable/ic_about_us_24dp"
-            android:title="About Us" />
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_rating"
             android:icon="@drawable/ic_chart_24dp"
             android:title="Rating"/>
         <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_power_settings_new_black_24dp"
-            android:title="Logout" />
+            android:id="@+id/nav_aboutus"
+            android:icon="@drawable/ic_about_us_24dp"
+            android:title="About Us" />
     </group>
 
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="none">
+        <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_power_settings_new_black_24dp"
+        android:title="Logout" />
+    </group>
 
 </menu>

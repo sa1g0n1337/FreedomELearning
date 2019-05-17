@@ -119,13 +119,13 @@ public class SpeakingFragment2 extends Fragment {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                btnPlay.setImageResource(R.drawable.ic_pause_50dp);
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
-                    btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                    btnPlay.setImageResource(R.drawable.ic_play_50dp);
                 } else {
                     mediaPlayer.start();
-                    btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                    btnPlay.setImageResource(R.drawable.ic_pause_50dp);
                     changeseekBar();
                 }
 
@@ -134,7 +134,7 @@ public class SpeakingFragment2 extends Fragment {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                btnPlay.setImageResource(R.drawable.ic_play_50dp);
                 seekBar.setMax(0);
                 changeseekBar();
                 final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
