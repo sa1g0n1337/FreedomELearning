@@ -3,6 +3,7 @@ package freedom.com.freedom_e_learning.speaking;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -105,14 +107,14 @@ public class SpeakingFragment1 extends Fragment {
             public void onClick(View v) {
                 if (btnRecord.getText().toString().equals("start record")) {
                     startRecording();
-                    btnRecord.setText("stop record");
+                    btnRecord.setBackgroundResource(R.drawable.recorded_button);
                     txtRecordLabel.setText("Tab button for stop record ...");
                     btnPlay.setEnabled(false);
                     btnDelete.setEnabled(false);
                     btnUpload.setEnabled(false);
                 } else if (btnRecord.getText().toString().equals("stop record")) {
                     stopRecording();
-                    btnRecord.setText("start record");
+                    btnRecord.setBackgroundResource(R.drawable.record_button);
                     txtRecordLabel.setText("Tab button for record ...");
                     btnPlay.setEnabled(true);
                     btnDelete.setEnabled(true);
