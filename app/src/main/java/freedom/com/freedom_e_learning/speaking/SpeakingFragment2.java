@@ -169,17 +169,29 @@ public class SpeakingFragment2 extends Fragment {
     public String miliSecondsToTimer(long miliseconds) {
         String finalTimerString = "";
         String secondsString;
+        String minutesString;
 
         int hours = (int) (miliseconds / (1000 * 60 * 60));
         int minutes = (int) (miliseconds % (1000 * 60 * 60)) / (1000 * 60);
         int seconds = (int) ((miliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
 
-        if (hours > 0) {
+        if (hours > 0 && seconds < 10) {
+            secondsString = "0" + seconds;
+        } else if (hours > 0 && seconds > 10) {
+            secondsString = "" + seconds;
+        } else if (seconds < 10) {
             secondsString = "0" + seconds;
         } else {
             secondsString = "" + seconds;
         }
-        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        if (minutes < 10) {
+            minutesString = "0" + minutes;
+        } else {
+            minutesString = "" + minutes;
+        }
+
+        finalTimerString = finalTimerString + minutesString + ":" + secondsString;
 
         return finalTimerString;
     }

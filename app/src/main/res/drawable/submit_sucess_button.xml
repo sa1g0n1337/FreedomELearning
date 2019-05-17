@@ -8,13 +8,13 @@
         </shape>
     </item>
     <item>
-         <inset
-             android:gravity="center"
-             android:drawable="@drawable/ic_upload_24dp"
-             android:insetRight="60dp"
-             android:insetLeft="60dp"
-             android:insetBottom="5dp"
-             android:insetTop="5dp"/></item>
+        <inset
+            android:gravity="center"
+            android:drawable="@drawable/ic_upload_sucess_24dp"
+            android:insetRight="60dp"
+            android:insetLeft="60dp"
+            android:insetBottom="5dp"
+            android:insetTop="5dp"/></item>
 
 
 </layer-list>

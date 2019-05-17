@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
+    <item >
         <shape android:shape="oval">
             <solid android:color="@color/colorRed"/>
-            <size android:width="100dp" android:height="100dp"/>
+            <size android:width="60dp" android:height="60dp"/>
         </shape>
     </item>
-    <item android:drawable="@drawable/speaking"></item>
+    <item>
+        <inset
+            android:drawable="@drawable/ic_record_24dp"
+            android:gravity="center"
+            android:insetTop="60dp"
+            android:insetBottom="60dp"
+            android:insetRight="60dp"
+            android:insetLeft="60dp"/>
+    </item>
 </layer-list>
