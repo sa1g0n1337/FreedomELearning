@@ -1,10 +1,6 @@
 package freedom.com.freedom_e_learning.listening;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -38,17 +34,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
-import freedom.com.freedom_e_learning.MainActivity;
 import freedom.com.freedom_e_learning.R;
-import freedom.com.freedom_e_learning.model.Teacher;
-import freedom.com.freedom_e_learning.model.User;
 import freedom.com.freedom_e_learning.model.listening.ListeningQuestion;
-import freedom.com.freedom_e_learning.model.topic.Topic;
-import freedom.com.freedom_e_learning.teacher.TeacherActivity;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class ListeningFragment1 extends Fragment {
@@ -151,7 +139,7 @@ public class ListeningFragment1 extends Fragment {
                 percent = percent * 100;
                 Log.d("percent ", String.valueOf(percent));
                 result += "------------------------------------\n";
-                result += "Correct Rate: " + String.format("%.2f",percent) + "\n";
+                result += "Correct Rate: " + String.format("%.2f", percent) + "\n";
                 MaterialStyledDialog.Builder dialog = new MaterialStyledDialog.Builder(getActivity());
                 dialog.setIcon(R.drawable.icon_success);
                 dialog.setDescription(result);
@@ -160,26 +148,25 @@ public class ListeningFragment1 extends Fragment {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         UID = databaseService.getFirebaseAuth().getUid();
-                        Log.d("Final ",UID);
+                        Log.d("Final ", UID);
                         topicid = "Topic " + TopicID;
                         final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                         final Date date = new Date();
-                        Log.d("date ",dateFormat.format(date));
-                        FirebaseDatabase.getInstance().getReference().child("Lisntening Answer").child(topicid).child(UID).addValueEventListener(new ValueEventListener() {
+                        Log.d("date ", dateFormat.format(date));
+                        FirebaseDatabase.getInstance().getReference().child("Listening Answer").child(UID).child(topicid).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()){
+                                if (dataSnapshot.exists()) {
                                     return;
-                                }
-                                else{
-                                    if(dataSnapshot.child(dateFormat.format(date)).exists()){
+                                } else {
+                                    if (dataSnapshot.child(dateFormat.format(date)).exists()) {
                                         return;
-                                    }
-                                    else{
-                                        FirebaseDatabase.getInstance().getReference().child("Lisntening Answer").child(topicid).child(UID).child(dateFormat.format(date)).setValue(String.format("%.2f",percent));
+                                    } else {
+                                        FirebaseDatabase.getInstance().getReference().child("Listening Answer").child(UID).child(topicid).child(dateFormat.format(date)).setValue(String.format("%.2f", percent));
                                     }
                                 }
                             }
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
 

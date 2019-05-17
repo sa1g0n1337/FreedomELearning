@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import freedom.com.freedom_e_learning.chart.ChartActivity;
 import freedom.com.freedom_e_learning.model.topic.Topic;
 import freedom.com.freedom_e_learning.topic.TopicRecyclerViewAdapter;
 

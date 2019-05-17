@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ChartActivity">
+    tools:context=".chart.ChartActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/ChartToolbar"
@@ -15,14 +15,12 @@
         android:theme="@style/ToolBarTheme.ToolBarStyle"
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@android:color/white" />
-    
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/ratingChart"
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ChartToolbar"/>
+        android:textAlignment="center" />
 
 
-
-
-</RelativeLayout>
+</LinearLayout>
