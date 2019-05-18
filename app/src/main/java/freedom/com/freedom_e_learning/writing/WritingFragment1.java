@@ -84,40 +84,6 @@ public class WritingFragment1 extends Fragment {
                 writingAnswer.setUserID(uid);
                 writingAnswer.setTopic(topic);
 
-                Teacher teacher1 = new Teacher();
-                teacher1.setName("Teacher A");
-                teacher1.setComment("Nice");
-
-                Teacher teacher2 = new Teacher();
-                teacher2.setName("Teacher B");
-                teacher2.setComment("Hoai dep trai vl!");
-
-                Teacher teacher3 = new Teacher();
-                teacher3.setName("Teacher C");
-                teacher3.setComment("Nice!!!!");
-
-                Teacher teacher4 = new Teacher();
-                teacher4.setName("Teacher D");
-                teacher4.setComment("Con ca vang mau xanh la cay hoi no mau gi?");
-
-                Teacher teacher5 = new Teacher();
-                teacher5.setName("Teacher E");
-                teacher5.setComment("Nulla bibendum mi ac massa auctor viverra. Nullam consectetur nisl a nisl viverra, in pharetra ipsum semper. Ut sed ante ac ex scelerisque ornare. Cras luctus, tellus eu lobortis consequat, nulla ante ultricies diam, ut tincidunt lacus arcu vitae est. Maecenas nec viverra felis. Pellentesque vitae nibh vel orci molestie dapibus a vitae nisl. Mauris nec feugiat augue. Proin elementum nec metus et fermentum. Suspendisse feugiat sit amet lectus vitae aliquam. Etiam in est et arcu sodales tempor. Mauris posuere est ac ipsum accumsan fringilla. Morbi et justo quis elit faucibus pharetra quis a ex. Proin non porta massa. Aliquam vel luctus libero, sit amet condimentum sapien.");
-
-                Teacher teacher6 = new Teacher();
-                teacher6.setName("Teacher F");
-                teacher6.setComment("Etiam quis venenatis orci, vitae blandit ipsum. Sed egestas tortor sodales, placerat tortor sit amet, semper mauris. Maecenas tincidunt risus sed lorem tincidunt varius. In hac habitasse platea dictumst. Nunc est ante, pellentesque eget ultricies sit amet, mattis efficitur velit. Phasellus gravida sed mauris at hendrerit. In auctor lobortis felis, eget aliquam dolor tincidunt at. Vivamus vitae tincidunt ipsum, in placerat sapien. Suspendisse eleifend massa in dui efficitur, sit amet sodales magna congue.!!!!");
-
-                ArrayList<Teacher> list = new ArrayList<>();
-                list.add(teacher1);
-                list.add(teacher2);
-                list.add(teacher3);
-                list.add(teacher4);
-                list.add(teacher5);
-                list.add(teacher6);
-
-                writingAnswer.setTeacher(list);
-
                 uploadAnswer(writingAnswer);
 
 
