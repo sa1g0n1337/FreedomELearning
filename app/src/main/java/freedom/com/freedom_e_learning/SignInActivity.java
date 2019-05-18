@@ -131,12 +131,14 @@ public class SignInActivity extends AppCompatActivity {
             public void onCancel() {
                 Log.d(TAG, "onCancel");
                 Toast.makeText(SignInActivity.this, "On Cancel", Toast.LENGTH_SHORT).show();
+                fblogin.setChecked(false);
             }
 
             @Override
             public void onError(FacebookException exception) {
                 Log.d(TAG, "onError");
                 Toast.makeText(SignInActivity.this, "On Error", Toast.LENGTH_SHORT).show();
+                fblogin.setChecked(false);
             }
         });
     }

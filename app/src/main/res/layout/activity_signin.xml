@@ -6,7 +6,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SignInActivity">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="center|bottom">
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Freedom-E-Learning"
+            android:textColor="#9C27B0"
+            android:textSize="35dp"
+            android:gravity="center"/>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,24 +35,15 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/app_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Freedom-E-Learning"
-            android:textColor="#ffe735"
-            android:textSize="20dp" />
 
         <com.sackcentury.shinebuttonlib.ShineButton
             android:id="@+id/fblogin"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_below="@id/app_name"
             android:layout_centerInParent="true"
             app:allow_random_color="false"
             app:big_shine_color="#2979ff"
-            app:btn_color="@android:color/darker_gray"
+            app:btn_color="#9C27B0"
             app:btn_fill_color="#004ecb"
             app:click_animation_duration="200"
             app:shine_count="8"
