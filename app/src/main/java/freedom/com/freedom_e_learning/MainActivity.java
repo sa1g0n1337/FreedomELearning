@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity
         setEvents();
         new LoadDataTask().execute();
 
+
     }
 
     @Override
@@ -170,12 +171,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_aboutus) {
-            item.setChecked(false);
+            if (item.isChecked()){
+                item.setChecked(false);
+            }
             Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_rating) {
-            item.setChecked(false);
+            if (item.isChecked()){
+                item.setChecked(false);
+            }
             Intent intent = new Intent(MainActivity.this, ChartActivity.class);
             startActivity(intent);
 
