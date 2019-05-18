@@ -110,12 +110,13 @@ public class TeacherSpeakingDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         topic = intent.getStringExtra("TOPIC");
         userID = intent.getStringExtra("USER_ID");
-        final DatabaseReference writingAnsRef = databaseService.getDatabase().child("SPEAKING ANSWER").child(topic).child(userID);
-        writingAnsRef.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference speakingAnsRef = databaseService.getDatabase().child("SPEAKING ANSWER").child(topic).child(userID);
+        speakingAnsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 seekBar.setEnabled(true);
                 speakingAnswer = dataSnapshot.getValue(SpeakingAnswer.class);
+                mediaPlayer.release();
                 Audiobar(speakingAnswer.getUserAudioURL());
             }
 
@@ -127,6 +128,7 @@ public class TeacherSpeakingDetailActivity extends AppCompatActivity {
     }
 
     private void Audiobar(String url){
+        mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mediaPlayer.setDataSource(url);
@@ -139,7 +141,7 @@ public class TeacherSpeakingDetailActivity extends AppCompatActivity {
             });
             mediaPlayer.prepare();
             final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
-            time.setText("0:0/" + totalTimer);
+            time.setText("00:00/" + totalTimer);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -211,20 +213,32 @@ public class TeacherSpeakingDetailActivity extends AppCompatActivity {
 
     }
 
-    public String miliSecondsToTimer(long miliseconds) {
+    private String miliSecondsToTimer(long miliseconds) {
         String finalTimerString = "";
         String secondsString;
+        String minutesString;
 
         int hours = (int) (miliseconds / (1000 * 60 * 60));
         int minutes = (int) (miliseconds % (1000 * 60 * 60)) / (1000 * 60);
         int seconds = (int) ((miliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
 
-        if (hours > 0) {
+        if (hours > 0 && seconds < 10) {
+            secondsString = "0" + seconds;
+        } else if (hours > 0 && seconds > 10) {
+            secondsString = "" + seconds;
+        } else if (seconds < 10) {
             secondsString = "0" + seconds;
         } else {
             secondsString = "" + seconds;
         }
-        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        if (minutes < 10) {
+            minutesString = "0" + minutes;
+        } else {
+            minutesString = "" + minutes;
+        }
+
+        finalTimerString = finalTimerString + minutesString + ":" + secondsString;
 
         return finalTimerString;
     }
