@@ -7,14 +7,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.ChartData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import freedom.com.freedom_e_learning.DatabaseService;
@@ -22,13 +19,12 @@ import freedom.com.freedom_e_learning.R;
 
 public class ChartActivity extends AppCompatActivity {
     private Toolbar Ctoolbar;
-    BarChart barChart;
     DatabaseService databaseService = DatabaseService.getInstance();
     String UserId;
     DatabaseReference listeningRef, readingRef;
     private RecyclerView rvChart;
     private ChartAdapter chartAdapter;
-    private ArrayList<ChartData> listeningChart, readingChart;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +32,6 @@ public class ChartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chart);
         setControl();
         getListeningFromFirebase();
-//        chartdata();
     }
 
     private void setControl() {

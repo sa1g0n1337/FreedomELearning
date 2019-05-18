@@ -21,14 +21,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
 import es.dmoral.toasty.Toasty;
 import freedom.com.freedom_e_learning.Constants;
 import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.TestActivity;
-import freedom.com.freedom_e_learning.model.Teacher;
 import freedom.com.freedom_e_learning.model.writing.WritingAnswer;
 
 public class WritingFragment1 extends Fragment {

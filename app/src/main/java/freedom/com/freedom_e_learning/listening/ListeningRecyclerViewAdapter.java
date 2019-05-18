@@ -80,7 +80,7 @@ public class ListeningRecyclerViewAdapter extends RecyclerView.Adapter<Listening
             radGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    switch (checkedId){
+                    switch (checkedId) {
                         case R.id.radListeningAnswer0:
                             Log.d("Pos ", String.valueOf(getAdapterPosition()));
                             listeningQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer0.getText().toString());

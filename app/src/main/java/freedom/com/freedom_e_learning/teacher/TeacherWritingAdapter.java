@@ -32,9 +32,9 @@ public class TeacherWritingAdapter extends RecyclerView.Adapter<TeacherWritingAd
     @NonNull
     @Override
     public TeacherWritingAdapter.RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
-        View v;
-        v = LayoutInflater.from(context).inflate(R.layout.user_list_item, viewGroup, false);
-        TeacherWritingAdapter.RecyclerViewHolder recyclerViewHolder = new TeacherWritingAdapter.RecyclerViewHolder(v);
+        View view;
+        view = LayoutInflater.from(context).inflate(R.layout.user_list_item, viewGroup, false);
+        TeacherWritingAdapter.RecyclerViewHolder recyclerViewHolder = new TeacherWritingAdapter.RecyclerViewHolder(view);
         return recyclerViewHolder;
     }
 

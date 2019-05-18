@@ -12,7 +12,6 @@ public class DatabaseService {
     private static FirebaseAuth mAuth;
     private static FirebaseDatabase mDatabase;
     private static FirebaseUser mUser;
-    private static DatabaseReference mUserReference;
     private static HashMap<String, String> profileImage = new HashMap<>();
 
     protected DatabaseService() {

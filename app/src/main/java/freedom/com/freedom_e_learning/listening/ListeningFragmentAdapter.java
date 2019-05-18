@@ -25,7 +25,7 @@ public class ListeningFragmentAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 ListeningFragment1 tab1 = new ListeningFragment1();
-                bundle.putSerializable("Topic",listening.getTopicId());
+                bundle.putSerializable("Topic", listening.getTopicId());
                 bundle.putSerializable("Listening_questions", listening.getQuestions());
                 bundle.putSerializable("Listening_audio", listening.getAudioURL());
                 tab1.setArguments(bundle);

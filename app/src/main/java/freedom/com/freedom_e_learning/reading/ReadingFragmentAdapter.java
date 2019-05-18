@@ -31,7 +31,7 @@ public class ReadingFragmentAdapter extends FragmentPagerAdapter {
                 return tab1;
             case 1:
                 ReadingFragment2 tab2 = new ReadingFragment2();
-                bundle.putSerializable("Topic",reading.getTopicId());
+                bundle.putSerializable("Topic", reading.getTopicId());
                 bundle.putSerializable("Reading_questions", reading.getQuestions());
                 tab2.setArguments(bundle);
                 return tab2;

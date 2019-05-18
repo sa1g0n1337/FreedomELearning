@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignInActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".SignInActivity">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
@@ -25,51 +26,51 @@
             android:id="@+id/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="Freedom-E-Learning"
             android:textColor="#ffe735"
-            android:textSize="20dp"
-            android:layout_centerInParent="true" />
+            android:textSize="20dp" />
 
         <com.sackcentury.shinebuttonlib.ShineButton
             android:id="@+id/fblogin"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_centerInParent="true"
             android:layout_below="@id/app_name"
+            android:layout_centerInParent="true"
             app:allow_random_color="false"
-            app:btn_color="@android:color/darker_gray"
             app:big_shine_color="#2979ff"
-            app:small_shine_color="#75a7ff"
+            app:btn_color="@android:color/darker_gray"
             app:btn_fill_color="#004ecb"
             app:click_animation_duration="200"
             app:shine_count="8"
             app:shine_turn_angle="10"
             app:siShape="@raw/facebook"
+            app:small_shine_color="#75a7ff"
 
             tools:ignore="MissingConstraints" />
     </RelativeLayout>
 
-        <!--<com.google.android.gms.common.SignInButton-->
-            <!--android:layout_below="@id/fb"-->
-            <!--android:id="@+id/sign_in_button"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="1000dp"-->
-            <!--android:visibility="gone"-->
-            <!--app:layout_constraintLeft_toLeftOf="parent"-->
-            <!--app:layout_constraintRight_toRightOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="parent" />-->
+    <!--<com.google.android.gms.common.SignInButton-->
+    <!--android:layout_below="@id/fb"-->
+    <!--android:id="@+id/sign_in_button"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="1000dp"-->
+    <!--android:visibility="gone"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="parent" />-->
 
-        <!--<Button-->
-            <!--android:layout_below="@id/sign_in_button"-->
-            <!--android:id="@+id/gg"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="60dp"-->
-            <!--android:background="#ff53"-->
-            <!--android:onClick="onClickGoogleButton"-->
-            <!--android:text="Google"-->
-            <!--android:textAllCaps="false"-->
-            <!--android:textColor="#ffffff"-->
-            <!--android:textSize="22sp" />-->
+    <!--<Button-->
+    <!--android:layout_below="@id/sign_in_button"-->
+    <!--android:id="@+id/gg"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="60dp"-->
+    <!--android:background="#ff53"-->
+    <!--android:onClick="onClickGoogleButton"-->
+    <!--android:text="Google"-->
+    <!--android:textAllCaps="false"-->
+    <!--android:textColor="#ffffff"-->
+    <!--android:textSize="22sp" />-->
 
 </LinearLayout>

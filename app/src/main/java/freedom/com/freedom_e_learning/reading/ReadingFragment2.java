@@ -1,8 +1,6 @@
 package freedom.com.freedom_e_learning.reading;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -71,7 +69,7 @@ public class ReadingFragment2 extends Fragment {
         btnSubmit = view.findViewById(R.id.btnReadingSubmit);
     }
 
-    public void quizTest(){
+    public void quizTest() {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,26 +105,25 @@ public class ReadingFragment2 extends Fragment {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         UID = databaseService.getFirebaseAuth().getUid();
-                        Log.d("Final ",UID);
+                        Log.d("Final ", UID);
                         topicid = "Topic " + TopicID;
                         final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                         final Date date = new Date();
-                        Log.d("date ",dateFormat.format(date));
+                        Log.d("date ", dateFormat.format(date));
                         FirebaseDatabase.getInstance().getReference().child("Reading Answer").child(topicid).child(UID).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()){
+                                if (dataSnapshot.exists()) {
                                     return;
-                                }
-                                else{
-                                    if(dataSnapshot.child(dateFormat.format(date)).exists()){
+                                } else {
+                                    if (dataSnapshot.child(dateFormat.format(date)).exists()) {
                                         return;
-                                    }
-                                    else{
-                                        FirebaseDatabase.getInstance().getReference().child("Reading Answer").child(topicid).child(UID).child(dateFormat.format(date)).setValue(String.format("%.2f",percent));
+                                    } else {
+                                        FirebaseDatabase.getInstance().getReference().child("Reading Answer").child(topicid).child(UID).child(dateFormat.format(date)).setValue(String.format("%.2f", percent));
                                     }
                                 }
                             }
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
 

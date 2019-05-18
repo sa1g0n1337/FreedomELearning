@@ -200,7 +200,8 @@ public class SpeakingFragment1 extends Fragment {
                     btnDelete.setEnabled(true);
                     btnUpload.setEnabled(true);
                     btnDelete.setBackgroundResource(R.drawable.delete_button);
-                    btnUpload.setBackgroundResource(R.drawable.submit_button);                    return;
+                    btnUpload.setBackgroundResource(R.drawable.submit_button);
+                    return;
                 }
             });
             builder.create().show();

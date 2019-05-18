@@ -18,7 +18,7 @@ public class UserSessionManager implements GoogleApiClient.ConnectionCallbacks, 
     public GoogleApiClient mGoogleApiClient;
 
     // Constructor
-    public UserSessionManager(Context context){
+    public UserSessionManager(Context context) {
         this._context = context;
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

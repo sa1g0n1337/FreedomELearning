@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import freedom.com.freedom_e_learning.R;
 import freedom.com.freedom_e_learning.model.Teacher;
-import freedom.com.freedom_e_learning.writing.WritingCommentsAdapter;
 
 public class SpeakingCommentsAdapter extends RecyclerView.Adapter<SpeakingCommentsAdapter.RecyclerViewHolder> {
     Context context;
@@ -22,6 +21,7 @@ public class SpeakingCommentsAdapter extends RecyclerView.Adapter<SpeakingCommen
         this.context = context;
         this.teachers = teachers;
     }
+
     @NonNull
     @Override
     public SpeakingCommentsAdapter.RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

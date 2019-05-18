@@ -1,13 +1,12 @@
 package freedom.com.freedom_e_learning.teacher;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +25,6 @@ public class TeacherSpeakingActivity extends AppCompatActivity {
     private ArrayList<User> users = new ArrayList<>();
     private TeacherSpeakingAdapter teacherSpeakingAdapter;
     //    Firebase
-    FirebaseUser user;
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference topicReference;
     RecyclerView rvTeacherSpeaking;

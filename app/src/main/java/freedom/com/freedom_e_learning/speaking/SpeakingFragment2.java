@@ -85,14 +85,14 @@ public class SpeakingFragment2 extends Fragment {
                 if (dataSnapshot.getValue() != null) {
                     SpeakingAnswer speakingAnswer = dataSnapshot.getValue(SpeakingAnswer.class);
                     teachers = speakingAnswer.getTeacher();
-                    if(teachers != null){
+                    if (teachers != null) {
                         speakingCommentsAdapter = new SpeakingCommentsAdapter(getContext(), teachers);
                         recyclerView.setAdapter(speakingCommentsAdapter);
                     }
                     mediaPlayer.release();
                     mediaPlayer = new MediaPlayer();
                     audioUrl = speakingAnswer.getUserAudioURL();
-                    if(audioUrl != null){
+                    if (audioUrl != null) {
                         seekBar.setEnabled(true);
                         Audiobar(audioUrl);
                     }
@@ -105,7 +105,7 @@ public class SpeakingFragment2 extends Fragment {
         });
     }
 
-    private void Audiobar(String url){
+    private void Audiobar(String url) {
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mediaPlayer.setDataSource(url);
@@ -119,7 +119,7 @@ public class SpeakingFragment2 extends Fragment {
             mediaPlayer.prepare();
             final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
             time.setText("0:0/" + totalTimer);
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -130,6 +130,7 @@ public class SpeakingFragment2 extends Fragment {
                     mediaPlayer.seekTo(i);
                 }
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 

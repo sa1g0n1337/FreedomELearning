@@ -1,18 +1,13 @@
 package freedom.com.freedom_e_learning.teacher;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,14 +16,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 
@@ -47,13 +38,12 @@ public class TeacherSpeakingDetailActivity extends AppCompatActivity {
     private Runnable runnable;
     private Handler handler;
     private TextView time;
-    private String uid;
-    private String audioUrl;
     private int save;
     private SpeakingAnswer speakingAnswer;
     private EditText edtTeacherComment;
     private Button btnSubmit;
     private DatabaseService databaseService = DatabaseService.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,12 +55,15 @@ public class TeacherSpeakingDetailActivity extends AppCompatActivity {
 
     public class LoadDataTask extends AsyncTask<Void, Void, Void> {
         private String comment;
+
         public String getComment() {
             return comment;
         }
+
         public void setComment(String comment) {
             this.comment = comment;
         }
+
         @Override
         protected Void doInBackground(Void... voids) {
             submitComment(this.comment);
@@ -127,7 +120,7 @@ public class TeacherSpeakingDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void Audiobar(String url){
+    private void Audiobar(String url) {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
@@ -142,7 +135,7 @@ public class TeacherSpeakingDetailActivity extends AppCompatActivity {
             mediaPlayer.prepare();
             final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
             time.setText("00:00/" + totalTimer);
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -152,6 +145,7 @@ public class TeacherSpeakingDetailActivity extends AppCompatActivity {
                     mediaPlayer.seekTo(i);
                 }
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 

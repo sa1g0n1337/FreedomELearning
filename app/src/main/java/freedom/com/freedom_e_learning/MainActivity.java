@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_rating){
+        } else if (id == R.id.nav_rating) {
             item.setChecked(false);
             Intent intent = new Intent(MainActivity.this, ChartActivity.class);
             startActivity(intent);

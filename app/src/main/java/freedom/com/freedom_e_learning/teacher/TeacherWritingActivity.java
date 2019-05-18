@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +28,6 @@ public class TeacherWritingActivity extends AppCompatActivity {
 
 
     //    Firebase
-    FirebaseUser user;
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference topicReference;
 

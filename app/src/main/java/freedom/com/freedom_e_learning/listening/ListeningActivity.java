@@ -37,7 +37,6 @@ public class ListeningActivity extends AppCompatActivity {
         topic = getIntent().getStringExtra(String.valueOf(R.string.TOPIC_ID));
 
 
-
         mToolbar = findViewById(R.id.ListeningToolbar);
         mToolbar.setTitle(String.format("Topic %s: Listening", topic));
         setSupportActionBar(mToolbar);

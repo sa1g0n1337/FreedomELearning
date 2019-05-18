@@ -10,16 +10,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/my_border" >
+        android:background="@drawable/my_border">
 
         <ImageView
             android:id="@+id/btnPlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:clickable="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:clickable="true"
             android:src="@drawable/ic_play_50dp" />
 
         <TextView
@@ -29,8 +29,8 @@
             android:layout_toRightOf="@+id/btnPlay"
             android:gravity="center"
             android:text="00:00/00:00"
-            android:textSize="20dp"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="20dp" />
 
         <SeekBar
             android:id="@+id/seekBar"
@@ -42,48 +42,53 @@
 
 
     </RelativeLayout>
+
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:text="Choose the correct answer"
         android:textSize="20dp"
-        android:text="Chose the correct answer"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
-            android:layout_weight="9"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="9">
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/listening_fragment1_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center">
-            </android.support.v7.widget.RecyclerView>
+                android:textAlignment="center"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
+
         <LinearLayout
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:gravity="center"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
             <Button
-                android:fontFamily="sans-serif-medium"
-                android:elevation="4dp"
-                android:textSize="0dp"
-                android:background="@drawable/submit_button"
                 android:id="@+id/btnListenSubmit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/submit_button"
+                android:elevation="4dp"
+                android:fontFamily="sans-serif-medium"
                 android:text="Submit"
-                android:textStyle="bold"
-                android:textColor="@color/colorWhite"/>
+                android:textColor="@color/colorWhite"
+                android:textSize="0dp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

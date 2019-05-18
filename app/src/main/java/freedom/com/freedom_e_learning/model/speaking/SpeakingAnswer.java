@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import freedom.com.freedom_e_learning.model.Teacher;
 
-public class SpeakingAnswer extends Speaking{
+public class SpeakingAnswer extends Speaking {
     private String userID;
     private ArrayList<Teacher> teacher;
 

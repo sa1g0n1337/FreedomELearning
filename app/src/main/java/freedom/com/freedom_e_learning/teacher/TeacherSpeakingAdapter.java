@@ -30,9 +30,9 @@ public class TeacherSpeakingAdapter extends RecyclerView.Adapter<TeacherSpeaking
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v;
-        v = LayoutInflater.from(context).inflate(R.layout.user_list_item, viewGroup, false);
-        TeacherSpeakingAdapter.RecyclerViewHolder recyclerViewHolder = new TeacherSpeakingAdapter.RecyclerViewHolder(v);
+        View view;
+        view = LayoutInflater.from(context).inflate(R.layout.user_list_item, viewGroup, false);
+        TeacherSpeakingAdapter.RecyclerViewHolder recyclerViewHolder = new TeacherSpeakingAdapter.RecyclerViewHolder(view);
         return recyclerViewHolder;
     }
 
@@ -56,6 +56,7 @@ public class TeacherSpeakingAdapter extends RecyclerView.Adapter<TeacherSpeaking
     public int getItemCount() {
         return users.size();
     }
+
     public void setTopic(String topic) {
         this.topic = topic;
     }

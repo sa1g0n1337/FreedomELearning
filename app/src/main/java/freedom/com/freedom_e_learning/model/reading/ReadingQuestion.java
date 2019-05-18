@@ -18,7 +18,6 @@ public class ReadingQuestion {
     }
 
 
-
     public ReadingQuestion() {
     }
 

@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +30,6 @@ public class TeacherActivity extends AppCompatActivity {
     private TeacherTopicAdapter teacherTopicAdapter;
 
     //    Firebase
-    FirebaseUser user;
     DatabaseService databaseService = DatabaseService.getInstance();
     DatabaseReference topicReference;
 

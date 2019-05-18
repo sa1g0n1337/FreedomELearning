@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import freedom.com.freedom_e_learning.model.User;
 import freedom.com.freedom_e_learning.model.speaking.Speaking;
 
 

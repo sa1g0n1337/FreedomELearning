@@ -81,7 +81,7 @@ public class ReadingRecyclerViewAdapter extends RecyclerView.Adapter<ReadingRecy
             radGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    switch (checkedId){
+                    switch (checkedId) {
                         case R.id.radReadingAnswer0:
                             Log.d("Pos ", String.valueOf(getAdapterPosition()));
                             readingQuestions.get(getAdapterPosition()).setChoseAnswer(radAnswer0.getText().toString());

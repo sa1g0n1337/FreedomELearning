@@ -1,11 +1,11 @@
 package freedom.com.freedom_e_learning;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.widget.GridLayout;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.GridLayout;
 import android.widget.Toast;
 
 
@@ -22,7 +22,7 @@ public class AboutUsActivity extends AppCompatActivity {
         gridclick(grid);
     }
 
-    private void setControl(){
+    private void setControl() {
         AUtoolbar = findViewById(R.id.AboutUsToolbar);
         AUtoolbar.setTitle(String.format("About Us"));
         setSupportActionBar(AUtoolbar);
@@ -31,14 +31,14 @@ public class AboutUsActivity extends AppCompatActivity {
         grid = (GridLayout) findViewById(R.id.grid);
     }
 
-    private void gridclick(GridLayout grid){
-        for(int i = 0; i<grid.getChildCount(); i++){
-            CardView cardView = (CardView)grid.getChildAt(i);
+    private void gridclick(GridLayout grid) {
+        for (int i = 0; i < grid.getChildCount(); i++) {
+            CardView cardView = (CardView) grid.getChildAt(i);
             final int finalI = i;
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(AboutUsActivity.this,"clicked at index" + finalI,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AboutUsActivity.this, "clicked at index" + finalI, Toast.LENGTH_SHORT).show();
                 }
             });
 
