@@ -125,6 +125,7 @@ public class SignInActivity extends AppCompatActivity {
                 Log.d(TAG, "onSuccess");
                 Toast.makeText(SignInActivity.this, "On Success", Toast.LENGTH_SHORT).show();
                 handleFacebookResult(loginResult.getAccessToken());
+                fblogin.setChecked(false);
             }
 
             @Override
