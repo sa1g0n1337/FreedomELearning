@@ -2,34 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
     android:gravity="center_horizontal"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/my_border">
         <ImageView
             android:id="@+id/btnPlay_Speaking_2"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:clickable="true"
-            android:src="@drawable/ic_play_circle_outline_24dp" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_play_50dp" />
         <TextView
             android:id="@+id/Time_Speaking_2"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/btnPlay_Speaking_2"
             android:gravity="center"
             android:text="00:00/00:00"
-            android:textAlignment="center" />
+            android:textSize="20dp"
+            android:textAlignment="center"  />
         <SeekBar
             android:id="@+id/seekBar_Speaking_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/Time_Speaking_2" />
+            android:layout_toRightOf="@+id/Time_Speaking_2"
+            android:thumb="@drawable/seekba_custom_thumb"/>
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/speaking_comment_recycler"

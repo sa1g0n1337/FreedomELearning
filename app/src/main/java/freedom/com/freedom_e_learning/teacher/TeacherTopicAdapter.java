@@ -47,11 +47,12 @@ public class TeacherTopicAdapter extends RecyclerView.Adapter<TeacherTopicAdapte
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, TeacherSpeakingActivity.class);
-                intent.putExtra(String.valueOf(R.string.TOPIC_ID), String.valueOf(topic.getId()));
+                intent.putExtra("TOPIC", topic.getId() + "");
                 intent.putExtra(Constants.USER_ID, userId);
                 context.startActivity(intent);
             }
         });
+
 
         recyclerViewHolder.btnTeacherWriting.setOnClickListener(new View.OnClickListener() {
             @Override

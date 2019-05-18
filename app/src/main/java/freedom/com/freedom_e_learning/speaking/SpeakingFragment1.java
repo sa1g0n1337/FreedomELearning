@@ -3,7 +3,7 @@ package freedom.com.freedom_e_learning.speaking;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.media.AudioManager;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -21,8 +21,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -31,14 +37,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
+import es.dmoral.toasty.Toasty;
+import freedom.com.freedom_e_learning.Constants;
+import freedom.com.freedom_e_learning.DatabaseService;
 import freedom.com.freedom_e_learning.R;
+import freedom.com.freedom_e_learning.model.speaking.SpeakingAnswer;
 
-import static freedom.com.freedom_e_learning.R.id.Time_Speaking_1;
 
 public class SpeakingFragment1 extends Fragment {
+    private DatabaseService mData = DatabaseService.getInstance();
+
     private String path;
     private File file;
     private SeekBar seekBar;
+    private String audioUrl;
     private ProgressDialog progressDialog;
     private TextView txtSpeakingArticle;
     private Integer topic;
@@ -46,7 +58,6 @@ public class SpeakingFragment1 extends Fragment {
     private Date date;
     private long time;
     private String speakingArticle;
-    private TextView txtRecordLabel;
     private Button btnRecord;
     private ImageView btnPlay;
     private Button btnDelete;
@@ -60,6 +71,8 @@ public class SpeakingFragment1 extends Fragment {
     private TextView audioTime;
     private int save;
     private Runnable runnable;
+    private SpeakingAnswer speakingAnswer;
+
 
     @Nullable
     @Override
@@ -71,13 +84,13 @@ public class SpeakingFragment1 extends Fragment {
     }
 
     public void setControl(View view) {
+        speakingAnswer = new SpeakingAnswer();
         speakingArticle = getArguments().getString("Speaking_article");
         topic = getArguments().getInt("Speaking_topic");
         uid = getArguments().getString("User ID"); //nhận UID
         progressDialog = new ProgressDialog(getActivity());
         // Lấy tạo đường dẫn tới node listening của topic 1, sau này sẽ set id của topic dynamic
         txtSpeakingArticle = view.findViewById(R.id.speaking_question);
-        txtRecordLabel = view.findViewById(R.id.txtRecord);
         btnRecord = view.findViewById(R.id.btnRecord);
         btnPlay = view.findViewById(R.id.btnPlay_Speaking_1);
         seekBar = view.findViewById(R.id.seekBar_Speaking_1);
@@ -106,20 +119,24 @@ public class SpeakingFragment1 extends Fragment {
                 if (btnRecord.getText().toString().equals("start record")) {
                     startRecording();
                     btnRecord.setText("stop record");
-                    txtRecordLabel.setText("Tab button for stop record ...");
+                    btnRecord.setBackgroundResource(R.drawable.recorded_button);
                     btnPlay.setEnabled(false);
                     btnDelete.setEnabled(false);
                     btnUpload.setEnabled(false);
+                    btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
+                    btnUpload.setBackgroundResource(R.drawable.submit_disable_button);
                 } else if (btnRecord.getText().toString().equals("stop record")) {
                     stopRecording();
                     btnRecord.setText("start record");
-                    txtRecordLabel.setText("Tab button for record ...");
                     btnPlay.setEnabled(true);
                     btnDelete.setEnabled(true);
                     btnUpload.setEnabled(true);
                     Audiobar(outputFile);
                     AudioPlay();
                     seekBar.setEnabled(true);
+                    btnRecord.setBackgroundResource(R.drawable.record_button);
+                    btnDelete.setBackgroundResource(R.drawable.delete_button);
+                    btnUpload.setBackgroundResource(R.drawable.submit_button);
                 }
             }
         });
@@ -128,7 +145,7 @@ public class SpeakingFragment1 extends Fragment {
             public void onClick(View v) {
                 deleteFile();
                 seekBar.setMax(0);
-                audioTime.setText("0:0/0:0");
+                audioTime.setText("00:00/00:00");
                 seekBar.setEnabled(false);
                 mediaPlayer.release();
                 mediaPlayer = null;
@@ -139,6 +156,11 @@ public class SpeakingFragment1 extends Fragment {
             @Override
             public void onClick(View v) {
                 uploadAudio();
+                seekBar.setMax(0);
+                audioTime.setText("00:00/00:00");
+                seekBar.setEnabled(false);
+                mediaPlayer.release();
+                mediaPlayer = null;
             }
         });
     }
@@ -174,11 +196,11 @@ public class SpeakingFragment1 extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     btnRecord.setText("start record");
-                    txtRecordLabel.setText("Tab button for record ...");
                     btnPlay.setEnabled(true);
                     btnDelete.setEnabled(true);
                     btnUpload.setEnabled(true);
-                    return;
+                    btnDelete.setBackgroundResource(R.drawable.delete_button);
+                    btnUpload.setBackgroundResource(R.drawable.submit_button);                    return;
                 }
             });
             builder.create().show();
@@ -204,7 +226,7 @@ public class SpeakingFragment1 extends Fragment {
         mediaPlayer = new MediaPlayer();
     }
 
-    private void Audiobar(String path){
+    private void Audiobar(String path) {
         try {
             mediaPlayer.setDataSource(path);
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -216,13 +238,13 @@ public class SpeakingFragment1 extends Fragment {
             });
             mediaPlayer.prepare();
             final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
-            audioTime.setText("0:0/" + totalTimer);
-        } catch (IOException e){
+            audioTime.setText("00:00/" + totalTimer);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void AudioPlay(){
+    private void AudioPlay() {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -231,6 +253,7 @@ public class SpeakingFragment1 extends Fragment {
                     changeseekBar();
                 }
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
@@ -244,20 +267,24 @@ public class SpeakingFragment1 extends Fragment {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                btnPlay.setImageResource(R.drawable.ic_pause_50dp);
                 if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
-                    btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                    btnPlay.setImageResource(R.drawable.ic_play_50dp);
                     btnRecord.setEnabled(true);
                     btnUpload.setEnabled(true);
                     btnDelete.setEnabled(true);
+                    btnUpload.setBackgroundResource(R.drawable.submit_button);
+                    btnDelete.setBackgroundResource(R.drawable.delete_button);
                 } else {
                     mediaPlayer.start();
-                    btnPlay.setImageResource(R.drawable.ic_pause_circle_outline_24dp);
+                    btnPlay.setImageResource(R.drawable.ic_pause_50dp);
                     changeseekBar();
                     btnRecord.setEnabled(false);
                     btnUpload.setEnabled(false);
                     btnDelete.setEnabled(false);
+                    btnUpload.setBackgroundResource(R.drawable.submit_disable_button);
+                    btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
                 }
             }
         });
@@ -267,11 +294,13 @@ public class SpeakingFragment1 extends Fragment {
                 btnRecord.setEnabled(true);
                 btnUpload.setEnabled(true);
                 btnDelete.setEnabled(true);
-                btnPlay.setImageResource(R.drawable.ic_play_circle_outline_24dp);
+                btnUpload.setBackgroundResource(R.drawable.submit_button);
+                btnDelete.setBackgroundResource(R.drawable.delete_button);
+                btnPlay.setImageResource(R.drawable.ic_play_50dp);
                 seekBar.setMax(0);
                 changeseekBar();
                 final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
-                audioTime.setText("0:0/" + totalTimer);
+                audioTime.setText("00:00/" + totalTimer);
                 seekBar.setMax(mediaPlayer.getDuration());
             }
         });
@@ -298,20 +327,32 @@ public class SpeakingFragment1 extends Fragment {
 //        }
     }
 
-    public String miliSecondsToTimer(long miliseconds) {
+    private String miliSecondsToTimer(long miliseconds) {
         String finalTimerString = "";
         String secondsString;
+        String minutesString;
 
         int hours = (int) (miliseconds / (1000 * 60 * 60));
         int minutes = (int) (miliseconds % (1000 * 60 * 60)) / (1000 * 60);
         int seconds = (int) ((miliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
 
-        if (hours > 0) {
+        if (hours > 0 && seconds < 10) {
+            secondsString = "0" + seconds;
+        } else if (hours > 0 && seconds > 10) {
+            secondsString = "" + seconds;
+        } else if (seconds < 10) {
             secondsString = "0" + seconds;
         } else {
             secondsString = "" + seconds;
         }
-        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        if (minutes < 10) {
+            minutesString = "0" + minutes;
+        } else {
+            minutesString = "" + minutes;
+        }
+
+        finalTimerString = finalTimerString + minutesString + ":" + secondsString;
 
         return finalTimerString;
     }
@@ -329,6 +370,8 @@ public class SpeakingFragment1 extends Fragment {
                     btnPlay.setEnabled(false);
                     btnDelete.setEnabled(false);
                     btnUpload.setEnabled(false);
+                    btnUpload.setBackgroundResource(R.drawable.submit_disable_button);
+                    btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -343,6 +386,7 @@ public class SpeakingFragment1 extends Fragment {
 
 
     private void uploadAudio() {
+        final AnimationDrawable[] sucessAnimation = new AnimationDrawable[1];
         file = new File(outputFile);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Alert!!!");
@@ -353,7 +397,7 @@ public class SpeakingFragment1 extends Fragment {
                 progressDialog.setMessage("Uploading Audio ...");
                 progressDialog.show();
                 file = new File(outputFile);
-                StorageReference filePath = storageReference.child("Speaking").child("Topic " + String.valueOf(topic)).child(uid).child("Speaking_file.3gp");
+                final StorageReference filePath = storageReference.child("Speaking").child("Topic_" + String.valueOf(topic)).child(uid).child("Speaking_file.3gp");
                 Uri uri = Uri.fromFile(file);
                 filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -363,9 +407,36 @@ public class SpeakingFragment1 extends Fragment {
                         btnPlay.setEnabled(false);
                         btnDelete.setEnabled(false);
                         btnUpload.setEnabled(false);
-                        txtRecordLabel.setText("Uploading Finished.");
+                        btnUpload.setBackgroundResource(R.drawable.upload_onsucess);
+                        btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
+                        filePath.getDownloadUrl()
+                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        audioUrl = uri.toString();
+                                        speakingAnswer.setUserAudioURL(audioUrl);
+                                        audioUrl = null;
+                                        speakingAnswer.setUserID(uid);
+                                        speakingAnswer.setTopic(topic);
+                                        uploadSpeakingAnswer(speakingAnswer);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
+                        sucessAnimation[0] = (AnimationDrawable) btnUpload.getBackground();
+                        sucessAnimation[0].start();
                     }
-                });
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -376,8 +447,29 @@ public class SpeakingFragment1 extends Fragment {
         });
         builder.create().show();
     }
-}
 
+
+    private void uploadSpeakingAnswer(final SpeakingAnswer answer) {
+        final DatabaseReference speakingNode = mData.createDatabase(Constants.SPEAKING_ANSWER).child(String.valueOf(answer.getTopic())).child(answer.getUserID());
+        speakingNode.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null) {
+                    speakingNode.setValue(answer);
+                    Toasty.success(getContext(), "Success!", Toast.LENGTH_SHORT, true).show();
+                } else {
+                    speakingNode.setValue(answer);
+                    Toasty.info(getContext(), "Updated!", Toast.LENGTH_SHORT, true).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+}
 
 
 

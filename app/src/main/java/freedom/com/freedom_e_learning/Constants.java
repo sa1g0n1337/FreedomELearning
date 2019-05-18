@@ -9,4 +9,5 @@ public class Constants {
     public static final String SPEAKING_NODE = "speaking";
     public static final String WRITING_NODE = "writing";
     public static final String WRITING_ANSWER = "WRITING ANSWER";
+    public static final String SPEAKING_ANSWER = "SPEAKING ANSWER";
 }
