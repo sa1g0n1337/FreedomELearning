@@ -3,18 +3,13 @@ package freedom.com.freedom_e_learning.speaking;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
-
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -96,7 +91,6 @@ public class SpeakingFragment1 extends Fragment {
         progressDialog = new ProgressDialog(getActivity());
         // Lấy tạo đường dẫn tới node listening của topic 1, sau này sẽ set id của topic dynamic
         txtSpeakingArticle = view.findViewById(R.id.speaking_question);
-
         btnRecord = view.findViewById(R.id.btnRecord);
         btnPlay = view.findViewById(R.id.btnPlay_Speaking_1);
         seekBar = view.findViewById(R.id.seekBar_Speaking_1);
@@ -110,8 +104,6 @@ public class SpeakingFragment1 extends Fragment {
         path += "/";
         time = date.getTime();
         outputFile = path + time + "_" + String.valueOf(topic) + "_" + uid + ".3gp";
-
-        AnimationDrawable sucessAnimation;
     }
 
     public void setEvents() {
@@ -126,25 +118,25 @@ public class SpeakingFragment1 extends Fragment {
             public void onClick(View v) {
                 if (btnRecord.getText().toString().equals("start record")) {
                     startRecording();
-                    btnRecord.setBackgroundResource(R.drawable.recorded_button);
                     btnRecord.setText("stop record");
+                    btnRecord.setBackgroundResource(R.drawable.recorded_button);
                     btnPlay.setEnabled(false);
                     btnDelete.setEnabled(false);
-                    btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
                     btnUpload.setEnabled(false);
+                    btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
                     btnUpload.setBackgroundResource(R.drawable.submit_disable_button);
                 } else if (btnRecord.getText().toString().equals("stop record")) {
                     stopRecording();
-                    btnRecord.setBackgroundResource(R.drawable.record_button);
                     btnRecord.setText("start record");
                     btnPlay.setEnabled(true);
                     btnDelete.setEnabled(true);
-                    btnDelete.setBackgroundResource(R.drawable.delete_button);
                     btnUpload.setEnabled(true);
-                    btnUpload.setBackgroundResource(R.drawable.submit_button);
                     Audiobar(outputFile);
                     AudioPlay();
                     seekBar.setEnabled(true);
+                    btnRecord.setBackgroundResource(R.drawable.record_button);
+                    btnDelete.setBackgroundResource(R.drawable.delete_button);
+                    btnUpload.setBackgroundResource(R.drawable.submit_button);
                 }
             }
         });
@@ -153,7 +145,7 @@ public class SpeakingFragment1 extends Fragment {
             public void onClick(View v) {
                 deleteFile();
                 seekBar.setMax(0);
-                audioTime.setText("0:0/0:0");
+                audioTime.setText("00:00/00:00");
                 seekBar.setEnabled(false);
                 mediaPlayer.release();
                 mediaPlayer = null;
@@ -164,6 +156,11 @@ public class SpeakingFragment1 extends Fragment {
             @Override
             public void onClick(View v) {
                 uploadAudio();
+                seekBar.setMax(0);
+                audioTime.setText("00:00/00:00");
+                seekBar.setEnabled(false);
+                mediaPlayer.release();
+                mediaPlayer = null;
             }
         });
     }
@@ -201,10 +198,9 @@ public class SpeakingFragment1 extends Fragment {
                     btnRecord.setText("start record");
                     btnPlay.setEnabled(true);
                     btnDelete.setEnabled(true);
-                    btnDelete.setBackgroundResource(R.drawable.delete_button);
                     btnUpload.setEnabled(true);
-                    btnUpload.setBackgroundResource(R.drawable.submit_button);
-                    return;
+                    btnDelete.setBackgroundResource(R.drawable.delete_button);
+                    btnUpload.setBackgroundResource(R.drawable.submit_button);                    return;
                 }
             });
             builder.create().show();
@@ -242,7 +238,7 @@ public class SpeakingFragment1 extends Fragment {
             });
             mediaPlayer.prepare();
             final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
-            audioTime.setText("0:0/" + totalTimer);
+            audioTime.setText("00:00/" + totalTimer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -277,8 +273,8 @@ public class SpeakingFragment1 extends Fragment {
                     btnPlay.setImageResource(R.drawable.ic_play_50dp);
                     btnRecord.setEnabled(true);
                     btnUpload.setEnabled(true);
-                    btnUpload.setBackgroundResource(R.drawable.submit_button);
                     btnDelete.setEnabled(true);
+                    btnUpload.setBackgroundResource(R.drawable.submit_button);
                     btnDelete.setBackgroundResource(R.drawable.delete_button);
                 } else {
                     mediaPlayer.start();
@@ -286,8 +282,8 @@ public class SpeakingFragment1 extends Fragment {
                     changeseekBar();
                     btnRecord.setEnabled(false);
                     btnUpload.setEnabled(false);
-                    btnUpload.setBackgroundResource(R.drawable.submit_disable_button);
                     btnDelete.setEnabled(false);
+                    btnUpload.setBackgroundResource(R.drawable.submit_disable_button);
                     btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
                 }
             }
@@ -297,14 +293,14 @@ public class SpeakingFragment1 extends Fragment {
             public void onCompletion(MediaPlayer mp) {
                 btnRecord.setEnabled(true);
                 btnUpload.setEnabled(true);
-                btnUpload.setBackgroundResource(R.drawable.submit_button);
                 btnDelete.setEnabled(true);
+                btnUpload.setBackgroundResource(R.drawable.submit_button);
                 btnDelete.setBackgroundResource(R.drawable.delete_button);
                 btnPlay.setImageResource(R.drawable.ic_play_50dp);
                 seekBar.setMax(0);
                 changeseekBar();
                 final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
-                audioTime.setText("0:0/" + totalTimer);
+                audioTime.setText("00:00/" + totalTimer);
                 seekBar.setMax(mediaPlayer.getDuration());
             }
         });
@@ -373,9 +369,9 @@ public class SpeakingFragment1 extends Fragment {
                     file.delete();
                     btnPlay.setEnabled(false);
                     btnDelete.setEnabled(false);
-                    btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
                     btnUpload.setEnabled(false);
                     btnUpload.setBackgroundResource(R.drawable.submit_disable_button);
+                    btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
                 }
             });
             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -410,10 +406,9 @@ public class SpeakingFragment1 extends Fragment {
                         file.delete();
                         btnPlay.setEnabled(false);
                         btnDelete.setEnabled(false);
-                        btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
                         btnUpload.setEnabled(false);
-
-                        txtRecordLabel.setText("Uploading Finished.");
+                        btnUpload.setBackgroundResource(R.drawable.upload_onsucess);
+                        btnDelete.setBackgroundResource(R.drawable.delete_disable_button);
                         filePath.getDownloadUrl()
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
@@ -432,9 +427,16 @@ public class SpeakingFragment1 extends Fragment {
 
                                     }
                                 });
-
+                        sucessAnimation[0] = (AnimationDrawable) btnUpload.getBackground();
+                        sucessAnimation[0].start();
                     }
-                });
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -445,7 +447,6 @@ public class SpeakingFragment1 extends Fragment {
         });
         builder.create().show();
     }
-
 
 
     private void uploadSpeakingAnswer(final SpeakingAnswer answer) {
@@ -468,9 +469,7 @@ public class SpeakingFragment1 extends Fragment {
             }
         });
     }
-
 }
-
 
 
 

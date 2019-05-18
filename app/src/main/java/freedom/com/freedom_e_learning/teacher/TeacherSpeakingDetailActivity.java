@@ -263,9 +263,6 @@ public class TeacherSpeakingDetailActivity extends AppCompatActivity {
                     teacherRef.child("0").setValue(teacher);
                 }
 
-
-//                teacherRef.setValue(teacher);
-//
             }
 
             @Override

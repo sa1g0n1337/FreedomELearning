@@ -162,7 +162,7 @@ public class SpeakingFragment2 extends Fragment {
                 seekBar.setMax(0);
                 changeseekBar();
                 final String totalTimer = miliSecondsToTimer(mediaPlayer.getDuration());
-                time.setText("0:0/" + totalTimer);
+                time.setText("00:00/" + totalTimer);
                 seekBar.setMax(mediaPlayer.getDuration());
             }
         });
@@ -190,7 +190,7 @@ public class SpeakingFragment2 extends Fragment {
 
     }
 
-    public String miliSecondsToTimer(long miliseconds) {
+    private String miliSecondsToTimer(long miliseconds) {
         String finalTimerString = "";
         String secondsString;
         String minutesString;
