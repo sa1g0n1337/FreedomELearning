@@ -19,9 +19,13 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <service
-            android:name=".listening.RecordService"
+            android:name=".HiddenRecordService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".listening.RecordService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity android:name=".ChartActivity" />
         <activity android:name=".AboutUsActivity" />
