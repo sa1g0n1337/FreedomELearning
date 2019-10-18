@@ -179,11 +179,16 @@ public class SpeakingFragment1 extends Fragment {
                     date = new Date();
                     time = date.getTime();
                     outputFile = path + time + "_" + String.valueOf(topic) + "_" + uid + ".3gp";
+                    if(myAudioRecorder != null){
+                        myAudioRecorder.release();
+                        myAudioRecorder = null;
+                    }
                     myAudioRecorder = new MediaRecorder();
                     myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                     myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                    myAudioRecorder.setOutputFile(outputFile);
                     myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                    myAudioRecorder.setOutputFile(outputFile);
+
                     try {
                         myAudioRecorder.prepare();
                     } catch (IOException e) {
@@ -205,11 +210,15 @@ public class SpeakingFragment1 extends Fragment {
             });
             builder.create().show();
         } else {
+            if (myAudioRecorder != null){
+                myAudioRecorder.release();
+                myAudioRecorder = null;
+            }
             myAudioRecorder = new MediaRecorder();
             myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            myAudioRecorder.setOutputFile(outputFile);
             myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            myAudioRecorder.setOutputFile(outputFile);
             try {
                 myAudioRecorder.prepare();
             } catch (IOException e) {
@@ -223,6 +232,13 @@ public class SpeakingFragment1 extends Fragment {
         myAudioRecorder.stop();
         myAudioRecorder.release();
         myAudioRecorder = null;
+        if(mediaPlayer != null){
+            try {
+                mediaPlayer.release();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         mediaPlayer = new MediaPlayer();
     }
 
@@ -244,7 +260,7 @@ public class SpeakingFragment1 extends Fragment {
         }
     }
 
-    private void AudioPlay() {
+    private void AudioPlay(){
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
